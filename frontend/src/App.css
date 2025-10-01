@@ -1,0 +1,585 @@
+/* SignUp CSS */
+
+.buttonColor:hover{
+  color: white;
+  background-color: black;
+}
+
+.buttonColor{
+  background-color: #255F38;
+  color: white;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonDiv{
+  text-align: center;
+  font-size: small
+}
+
+.containerParent{
+  height: 100vh;
+  background-color: white;
+}
+
+@media (min-width: 768px){
+  .image{
+    width: 100%;
+    height: 430px;
+    background-size: cover;
+    background-position: center;
+    border-top-right-radius: 40% 40%;
+    border-bottom-right-radius: 40% 40%;
+    padding: 0.5rem 0 0.5rem 0;
+    
+  }
+
+  .containerColor{
+    /* background-color: #DDC3C3; */
+    /* padding: 2rem; */
+    width: 40rem;
+    box-shadow: 10px 10px 5px #2c2638;
+  }
+}
+
+
+.gradientC{
+  /* background-color: #2c2638; */
+  background: #000000;
+  background: linear-gradient(90deg,rgba(0, 0, 0, 1) 0%, rgba(2, 89, 54, 1) 50%, rgba(0, 0, 0, 1) 100%);
+}
+
+.labelC{
+  /* color: #878294; */
+  color: white;
+}
+
+.h1C{
+  color: white;
+}
+
+.textP{
+  font-size: small;
+  color: white;
+}
+
+
+.textP2 {
+  width: 70%;
+  margin: .7em auto;
+  overflow: hidden;
+  text-align: center;
+  font-weight:300;
+  color: #fff;
+  font-size: small;
+}
+.textP2:before, .textP2:after {
+  content: "";
+  display: inline-block;
+  width: 50%;
+  margin: 0 .5em 0 -55%;
+  vertical-align: middle;
+  border-bottom: 0.5px solid;
+}
+.textP2:after {
+  margin: 0 -55% 0 .5em;
+}
+span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.google{
+  width: 10%;
+}
+
+.github{
+  width: 16%;
+  margin: 0 1rem 0 1rem;
+}
+
+.facebook{
+  width: 11%;
+}
+
+.errorMsg{
+  color: #DC3545;
+  font-size: 0.65rem;
+  margin-left: 4px;
+}
+
+.wrapper {
+  position:relative;
+}
+
+.icon{
+  position: absolute;
+  /* transform: translateY(-50%); */
+}
+
+.cursor{
+  cursor: pointer;
+}
+
+@media (max-width : 424px) {
+  .image{
+    width: 100%;
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+    border-bottom-right-radius: 40% 40%;
+    border-bottom-left-radius: 40% 40%;
+    padding: 0.5rem 0 0.5rem 0;
+  }
+}
+@media screen and (min-width: 425px) and (max-width: 767px) {
+  .image{
+    width: 100%;
+    height: 450px;
+    background-size: cover;
+    background-position: center;
+    border-bottom-right-radius: 40% 40%;
+    border-bottom-left-radius: 40% 40%;
+    padding: 0.5rem 0 0.5rem 0;
+  }
+
+  .inputF{
+    width: 100%;
+  }
+}
+
+/* Navbar CSS starts from here */
+
+.navbar{
+  background-color: white !important;
+}
+
+.navColor{
+  background-color: #024a2d;
+  height: 25px;
+}
+
+.textColor{
+  color: white;
+  font-size: 13px;
+}
+
+.iconColorN{
+  color:#024a2d;
+  
+}
+
+.searchNav{
+  height: 80%;
+  width: 100%;
+  border-radius: 30px;
+  position: relative;
+}
+
+.searchIcon{
+  position: absolute;
+}
+
+.navTranslate{
+  transform: translate(-50%, 0%)
+  
+}
+
+/* Hero Section */
+
+.buttonHero{
+  border-radius: 30px;
+  background-color: #024a2d;
+  color: white;
+}
+
+.heroH2{
+  font-weight: 600;
+  color: #024a2d;
+}
+
+.heroContainer{
+  background-color: #faefe6;
+  margin-left: 80px ;
+  margin-right: 80px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+heroCol1{
+  padding: 80px;
+}
+
+.emptyDiv{
+  background-color: #faefe6;
+  width: 50px
+}
+
+.buttonDivHero{
+  width: 440px;
+}
+
+
+@keyframes slideInFromBottomRight {
+  0% {
+    transform: translateX(80%) translateY(80%);
+    
+  }
+  100% {
+    transform: translateX(0) translateY(0);
+    
+  }
+}
+
+@keyframes slideInFromBottom {
+  0% {
+    transform: translateY(80%);
+    
+  }
+  100% {
+    transform: translateY(0);
+    
+  }
+}
+
+
+.imageHero{
+  
+  animation-duration: 0.3s; /* the duration of the animation */
+  animation-timing-function: ease-out; /* how the animation will behave */
+  animation-delay: 0s; /* how long to delay the animation from starting */
+  animation-iteration-count: 1; /* how many times the animation will play */
+  animation-name: slideInFromBottomRight; /* the name of the animation we defined above */
+  
+
+  margin-top: 30px;
+  width: 60%;
+}
+
+.leftHero{
+  animation-duration: 0.3s; /* the duration of the animation */
+  animation-timing-function: ease-out; /* how the animation will behave */
+  animation-delay: 0s; /* how long to delay the animation from starting */
+  animation-iteration-count: 1; /* how many times the animation will play */
+  animation-name: slideInFromBottom; /* the name of the animation we defined above */
+}
+  
+.filterDiv{
+  animation-duration: 0.3s; /* the duration of the animation */
+  animation-timing-function: ease-out; /* how the animation will behave */
+  animation-delay: 0s; /* how long to delay the animation from starting */
+  animation-iteration-count: 1; /* how many times the animation will play */
+  animation-name: slideInFromBottom; /* the name of the animation we defined above */
+}
+
+
+
+/* Card */
+
+.card{
+  animation-duration: 0.3s; /* the duration of the animation */
+  animation-timing-function: ease-out; /* how the animation will behave */
+  animation-delay: 0s; /* how long to delay the animation from starting */
+  animation-iteration-count: 1; /* how many times the animation will play */
+  animation-name: slideInFromBottom; /* the name of the animation we defined above */
+
+  
+}
+
+
+
+.card:hover{
+  transform: scaleX(1.03) scaleY(1.03);
+  transform-origin: top;
+}
+
+
+.cardWidth{
+  width: 18rem;
+}
+
+.cardImg{
+  height: 300px;
+  background-color: #f6f6f6;
+  border-radius: 10px;
+}
+
+.dollar:before {
+  content: '$';
+  font-size: 0.6em;
+  vertical-align: top;
+}
+
+.zeros:before {
+  content: '.00';
+  font-size: 0.6em;
+  vertical-align: top;
+}
+
+.zeros{
+  position: absolute;
+  right: -13px;
+}
+
+.cardP{
+  margin-top: -10px;
+  font-size: smaller;
+  margin-left: -10px;
+}
+
+.cardDiv{
+  margin-top: -10px;
+  margin-left: -10px;
+  position: relative
+}
+
+.cardBtn{
+  border: 0.4px solid black;
+
+  margin-left: -10px;
+  border-radius: 30px;
+  
+}
+
+.cardBtn:hover{
+  background-color: #024a2d;
+  color: white;
+}
+
+.cardStar{
+  margin-top: -10px;
+  margin-left: -10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.cardStar .checked{
+  color: green;
+}
+
+.ulCard{
+  list-style-type: none;
+  margin-left: 36px;
+}
+
+.cardHeart{
+  position: absolute;
+  z-index: 10;
+  right: 21px;
+  top: 21px;
+  background-color: white;
+  border-radius: 100%;
+}
+
+.redHeart{
+  position: absolute;
+  z-index: 10;
+  right: 14px;
+  top: 16px;
+  width: 10%;
+}
+
+.heartActive{
+  color: red;
+}
+
+.heart{
+  color: black;
+}
+
+.heartDiv{
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  z-index: 1;
+  right: 14px;
+  top: 14px;
+  background-color: white;
+  border-radius: 100%;
+}
+
+.h3Card{
+  margin: 50px 0 36px 80px;
+}
+
+.cardsContainer{
+  overflow: hidden !important;
+}
+
+
+/* Button Component */
+
+.buttonComp{
+  background-color:#e9edec;
+  border-radius: 30px;
+}
+
+
+
+/* Footer */
+
+.footerFluid{
+  background-color: #024a2d;
+  color: white;
+}
+
+.footerbtn{
+  background-color: white; 
+  color: black;
+}
+
+.footerbtn:hover{
+  color: white;
+  background-color: black;
+}
+
+.footerColor{
+  color: #dddddd;
+}
+
+.footerText{
+  font-size: 13px;
+}
+
+.google1{
+  width: 10%;
+}
+
+.github1{
+  width: 13%;
+}
+
+.facebook1{
+  width: 11%;
+}
+
+.anchor{
+  text-decoration: none;
+  color: #dddddd;
+  
+}
+
+/* Pagination */
+
+.PaginationDiv{
+  height: 50px;
+  width: 50px;
+  background-color: #f6f6f6;
+  margin: 5px;
+  border-radius: 100%;
+  position: relative;
+  cursor: pointer;
+}
+
+.paginationP{
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.PaginationDiv:hover{
+  background-color: #024a2d;
+  color: white;
+}
+
+
+
+/* View */
+/* Hero */
+
+.viewHeroImageDiv{
+  height: 70vh;
+  width: 40vw;
+  background-color: #f6f6f6;
+}
+
+.imgA{
+  width: 80%;
+}
+
+.smallImgParent{
+  margin-top: 3vh;
+}
+
+.smallImgA{
+  background-color: #f6f6f6;
+  width: 9vw;
+  height: 20vh;
+}
+
+.imgB{
+  width: 75%;
+}
+
+.chooseColor1{
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background-image: linear-gradient(0deg, #e5544c 50%, 
+  #f7cccb 50%);
+  margin-right: 10px;
+}
+
+.chooseColor2{
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background-image: linear-gradient(0deg, #3d3d3a 50%,  #c5c5c5 50%);
+  margin-right: 10px;
+}
+
+.chooseColor3{
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background-image: linear-gradient(0deg, 
+  #b0bfac 50%, 
+  #e9ece7 50%);
+  margin-right: 10px;
+}
+
+.chooseColor4{
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background-image: linear-gradient(0deg, 
+  #c0cbd4 50%, 
+  #31506d 50%);
+  margin-right: 10px;
+}
+
+.counterButton{
+  border: none;
+  height: 35px;
+  width: 35px;
+}
+
+.counterDiv{
+  height: 35px;
+  width: 35px;
+  background-color: 
+  #efefef;
+}
+
+.counterP{
+  position: absolute;
+  top: 5px;
+  left: 13px;
+}
+
+.viewBtn:hover{
+  border: 0.4px solid black;
+  
+  margin-left: -10px;
+  border-radius: 30px;
+  
+}
+
+.viewBtn{
+  background-color: #024a2d;
+  color: white;
+  border-radius: 30px;
+}
