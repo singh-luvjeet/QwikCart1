@@ -36,6 +36,24 @@ app.get("/cards", async (req, res) => {
     }
   });
 
+  app.post("/cards/add-card", async (req, res) => {
+    try {
+        const { name, description, price, image } = req.body;
+
+        if (!name || !description || !price || !image) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        const newCard = new Card({ name, description, price, image });
+        await newCard.save();
+
+        res.status(201).json({ message: "Product added successfully", product: newCard });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
   app.get("/cards/:id", async (req, res) => {
     try {
       const card = await Card.findById(req.params.id);
@@ -50,10 +68,9 @@ app.get("/cards", async (req, res) => {
 
 app.post("/cart/add", authMiddleware, async (req, res) => {
     const { productId, quantity } = req.body;
-  
     try {
       const userId = req.user._id; 
-  
+      
       let cart = await Cart.findOne({ userId });
       if (!cart) {
         cart = new Cart({
@@ -80,7 +97,19 @@ app.get("/cart", authMiddleware, async (req, res) => {
     try {
       const userId = req.user._id;
       const cart = await Cart.findOne({ userId }).populate("items.productId");
-      res.json(cart || { items: [] });
+      if (!cart) {
+        cart = { userId, items: [] };
+      }
+  
+      res.json({
+        userId: cart.userId,
+        items: cart.items.map(item => ({
+          _id: item._id,
+          quantity: item.quantity,
+          product: item.productId,
+        }))
+      });
+      
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -97,6 +126,8 @@ app.get("/cart", authMiddleware, async (req, res) => {
       res.status(500).json({ message: "Server error" });
     }
   });
+
+  
 
 app.listen(PORT, () => {
   console.log(`Server running at Port ${PORT}`);

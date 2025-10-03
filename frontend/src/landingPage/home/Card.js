@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react'
 import image8 from '../../assets/headphone.png'
 import img9 from '../../assets/favorite.png'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { CartContext } from "../context/Cart"
+import { toast } from 'react-toastify';
 
 const Card = () => {
   const [allCards, setAllCards] = useState([]);
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, currentUser } = useContext(CartContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const backendURL = "http://localhost:4000";
@@ -23,6 +25,15 @@ const Card = () => {
       card._id === id ? {...card, liked: !card.liked} : card
     );
     setAllCards(updatedCard);
+  }
+
+  const handleAddToCart = (card) => {
+    if (!currentUser) {
+      toast.info("Please login to add items to cart", { position: "top-right" });
+      navigate('/login'); 
+      return;
+    }
+    addToCart(card, 1);
   }
 
   const cardItems = allCards.map(card => 
@@ -59,7 +70,7 @@ const Card = () => {
             <span className='text-muted'>(121)</span>
           </div>
 
-          <button class='btn cardBtn' onClick={() => addToCart(card)} >Add to Cart</button>
+          <button class='btn cardBtn' onClick={() => handleAddToCart(card)} >Add to Cart</button>
         </div>
       </div>
       </li>

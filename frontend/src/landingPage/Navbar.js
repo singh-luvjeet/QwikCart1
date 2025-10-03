@@ -1,14 +1,22 @@
 import React, { useContext } from 'react'
 import { CartContext } from './context/Cart';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
-  const { cartItems } = useContext(CartContext);
+  const { cartItems, currentUser, logout } = useContext(CartContext);
+  const navigate = useNavigate();
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-  function submitHandler(e){
-      e.preventDefault();
+  const handleCartClick = (e) => {
+    e.preventDefault();
+    if (currentUser) {
+      navigate('/cart-total');
+    } else {
+      navigate('/login');
+    }
   }
+
   return (
     <>
       <div className='d-flex justify-content-around align-items-center navColor'>
@@ -99,14 +107,22 @@ const Navbar = () => {
         {/* <i class="fa fa-search searchIcon me-3 text-muted cursor" onClick={submitHandler} aria-hidden="true"></i> */}
         {/* <button class="btn btn-outline-success" type="submit">search</button> */}
       </form>
-      <li class='nav-item ms-4'>
-                <a class='nav-link' href='#'>
-                <i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;Account
-                </a>
-              </li> 
+      <li className='nav-item ms-4'>
+                {currentUser ? (
+                  <button
+                    className='btn btn-link nav-link'
+                    onClick={logout}
+                  ><i class="fa fa-user-o" aria-hidden="true"></i> Logout
+                  </button>
+                ) : (
+                  <a className='nav-link' href='/login'>
+                    <i class="fa fa-user-o" aria-hidden="true"></i> Login
+                  </a>
+                )}
+              </li>
 
               <li class='nav-item ms-4'>
-                <a class='nav-link position-relative' href='#'>
+                <a class='nav-link position-relative' href='/cart-total' onClick={handleCartClick}>
                 <i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart
                 {totalItems > 0 && (
                 <span className="position-absolute top-0 start-100 navTranslate badge rounded-pill bg-success">

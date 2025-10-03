@@ -16,6 +16,10 @@ const cardSchema = new mongoose.Schema({
     liked:{
         type: Boolean,
         default: false,
+    },
+    image: {
+        type: String,
+        required: true,
     }
 })
 

@@ -195,6 +195,10 @@ span {
   color: white;
 }
 
+.buttonHero:hover{
+  border: 0.1px solid black !important;
+}
+
 .heroH2{
   font-weight: 600;
   color: #024a2d;
@@ -416,7 +420,14 @@ heroCol1{
   border-radius: 30px;
 }
 
+.buttonComp:hover{
+  border: 0.2px solid black;
+}
 
+.filterButton:hover{
+  background-color:#e9edec;
+  border: none !important;
+}
 
 /* Footer */
 

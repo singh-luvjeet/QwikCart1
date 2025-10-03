@@ -1,18 +1,22 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CartContext } from "../context/Cart"
 import imga from '../../assets/imgA.png'
 import imgb from '../../assets/imgB.png'
 import imgc from '../../assets/imgC.png'
 import imgd from '../../assets/imgD.png'
+import { toast } from "react-toastify";
 
 const Hero = () => {
   const [count, setCount] = useState(1);
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, currentUser } = useContext(CartContext);
+  const navigate = useNavigate();
 
   const { id } = useParams(); // get the product id from URL
   const [product, setProduct] = useState(null);
+
+  
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -39,6 +43,15 @@ const Hero = () => {
       return;
     }
     setCount(count - 1);
+  }
+
+  const handleAddToCart = () => {
+    if (!currentUser) {
+      toast.info("Please login to add items to cart", { position: "top-right" });
+      navigate('/login'); // redirect to login
+      return;
+    }
+    addToCart(product, count);
   }
 
   return (
@@ -136,7 +149,7 @@ const Hero = () => {
             <div className='d-flex justify-content-start'>
               <button
                 class='btn viewBtn'
-                onClick={() => addToCart(product, count)}
+                onClick={() => handleAddToCart(product)}
                 style={{
                   marginRight: '40px',
                   marginLeft: '3px',

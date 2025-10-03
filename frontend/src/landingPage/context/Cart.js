@@ -1,56 +1,90 @@
 import { createContext, useState, useEffect } from 'react'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 export const CartContext = createContext()
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
+  const [loadingUser, setLoadingUser] = useState(true)
 
   const fetchCurrentUser = async () => {
     try {
+      console.log("Fetching current user...")
       const res = await axios.get('http://localhost:4000/current-user', {
         withCredentials: true
       })
+      console.log("Current user fetched:", res.data)
       setCurrentUser(res.data)
     } catch (err) {
+      console.error("Error fetching current user:", err)
       setCurrentUser(null)
-      console.error(err)
+      setCartItems([])
+    } finally {
+      setLoadingUser(false) 
     }
   }
 
-  // You have to load the current user from the backend first, otherwise you don’t know which user is logged in.
   useEffect(() => {
     fetchCurrentUser()
   }, [])
 
   useEffect(() => {
     const fetchCart = async () => {
-      if (!currentUser) return
+      if (!currentUser) {
+        console.log("No current user, clearing cart")
+        setCartItems([])
+        return
+      }
       try {
+        console.log(`Fetching cart for user ${currentUser._id}`)
         const res = await axios.get('http://localhost:4000/cart', {
           withCredentials: true
         })
+        console.log("Cart fetched:", res.data.items)
         setCartItems(res.data.items || [])
       } catch (err) {
-        console.error(err)
+        console.error("Error fetching cart:", err)
+        setCartItems([])
       }
     }
-
     fetchCart()
-  }, [currentUser])
+  }, [currentUser]) 
+
+  const logout = async () => {
+    try {
+      await axios.post('http://localhost:4000/logout', {}, { withCredentials: true });
+      setCurrentUser(null);
+      setCartItems([]);
+      console.log("User logged out successfully");
+      toast.success("You have logged out successfully!", { position: "top-center" })
+    } catch (err) {
+      console.error("Error logging out:", err);
+    }
+  };
 
   const addToCart = async (product, quantity) => {
-    const res = await axios.post(
-      'http://localhost:4000/cart/add',
-      { productId: product._id, quantity },
-      { withCredentials: true }
-    )
-    setCartItems(res.data.items)
+    if (!currentUser){
+      console.log("No user logged in, cannot add to cart")
+      return
+    } 
+    try {
+      console.log(`Adding product ${product._id} (qty: ${quantity}) to cart for user ${currentUser._id}`)
+      const res = await axios.post(
+        'http://localhost:4000/cart/add',
+        { productId: product._id, quantity },
+        { withCredentials: true }
+      )
+      console.log("Cart updated:", res.data.items)
+      setCartItems(res.data.items)
+    } catch (err) {
+      console.error("Error adding to cart:", err)
+    }
   }
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, currentUser, setCurrentUser, logout, loadingUser  }}>
       {children}
     </CartContext.Provider>
   )

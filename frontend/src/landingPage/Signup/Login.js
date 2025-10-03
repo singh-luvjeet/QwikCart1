@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import '../../App.css'
 import image4 from '../../assets/go.png'
 import image5 from '../../assets/gi.png'
@@ -10,8 +10,10 @@ import { FaEyeSlash } from 'react-icons/fa'
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { CartContext } from '../context/Cart'
 
 const Login = ({ setToggle }) => {
+  const { setCurrentUser } = useContext(CartContext);
   const navigate = useNavigate();
   const [type, setType] = useState('password')
   const [icon, setIcon] = useState(FaEyeSlash)
@@ -62,8 +64,9 @@ const Login = ({ setToggle }) => {
           { withCredentials: true }
         );
         console.log(data);
-        const { success, message } = data;
+        const { success, message, user } = data;
         if (success) {
+          setCurrentUser(user);
           handleSuccess(message);
           setTimeout(() => {
             navigate("/");

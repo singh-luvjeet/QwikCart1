@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import '../../App.css'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -10,8 +10,10 @@ import { FaEyeSlash } from 'react-icons/fa'
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from '../context/Cart'
 
 const Signup = ({ setToggle }) => {
+  const { setCurrentUser } = useContext(CartContext);
   const navigate = useNavigate();
   const [type, setType] = useState('password')
   const [type2, setType2] = useState('password')
@@ -98,8 +100,9 @@ const Signup = ({ setToggle }) => {
           values,
           { withCredentials: true }
         );
-        const { success, message } = data;
+        const { success, message, user } = data;
         if (success) {
+          setCurrentUser(user);
           toast.success(message, { position: "top-right" });
           setTimeout(() => navigate("/"), 1000);
         } else {

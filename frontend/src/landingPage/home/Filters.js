@@ -22,7 +22,7 @@ const Filters = () => {
           <button
             type='button'
             style={{ margin: '50px 75px 0 0', border: '0.1px solid black' }}
-            class='btn rounded-pill btn-sm btn-sm ms-2'
+            class='btn filterButton rounded-pill btn-sm btn-sm ms-2'
           >
             All Filters&nbsp;&nbsp;
             <i class='fa fa-sort-desc' aria-hidden='true'></i>
