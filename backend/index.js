@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const authRoute = require('./Routes/AuthRoute')
+const addressRoute = require('./Routes/AddressRoute');
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const authMiddleware = require('./Middlewares/Auth')
@@ -30,6 +31,7 @@ app.use(cookieParser())
 app.use(express.json())
 
 app.use('/', authRoute)
+app.use('/address', addressRoute);
 
 app.get('/cards', async (req, res) => {
   try {
