@@ -4,14 +4,17 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { CartProvider } from './landingPage/context/Cart';
+import { SearchProvider } from './landingPage/context/SearchContext';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <SearchProvider>
     <CartProvider>
       <App/>
     </CartProvider>
+    </SearchProvider>
   </React.StrictMode>
 );
 

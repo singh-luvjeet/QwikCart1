@@ -17,10 +17,17 @@ const cardSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    image: {
-        type: String,
-        required: true,
-    }
+    images: [   // 👈 Changed from 'image' to 'images'
+        {
+          type: String,
+          required: true,
+        },
+    ],
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
 })
 
 module.exports = mongoose.model("Card", cardSchema);

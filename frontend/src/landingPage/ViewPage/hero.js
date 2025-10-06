@@ -2,35 +2,33 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { CartContext } from "../context/Cart"
-import imga from '../../assets/imgA.png'
-import imgb from '../../assets/imgB.png'
-import imgc from '../../assets/imgC.png'
-import imgd from '../../assets/imgD.png'
 import { toast } from "react-toastify";
 
 const Hero = () => {
   const [count, setCount] = useState(1);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams(); // get the product id from URL
   const { addToCart, currentUser } = useContext(CartContext);
   const navigate = useNavigate();
 
-  const { id } = useParams(); // get the product id from URL
-  const [product, setProduct] = useState(null);
-
-  
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`http://localhost:4000/cards/${id}`);
         setProduct(response.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching product:", error);
+        setLoading(false);
       }
     };
     fetchProduct();
   }, [id]);
 
-  if (!product) return <p>Loading...</p>;
+  if (loading) return <div>Loading...</div>;
+  if (!product) return <div>Product not found</div>;
 
   const countPlus = () => {
     if(count>19){
@@ -60,21 +58,18 @@ const Hero = () => {
         <div className='row'>
           <div className='col-6'>
             <div className='viewHeroImageDiv d-flex justify-content-center align-items-center'>
-              <img src={imga} className='imgA' alt='...' />
+              <img src={product.images[0]} className='imgA' alt='...' />
             </div>
-            <div className='smallImgParent d-flex justify-content-between align-items-center'>
-              <div className='smallImgA d-flex justify-content-center align-items-center'>
-                <img src={imga} className='imgB ' alt='...' />
-              </div>
-              <div className='smallImgA d-flex justify-content-center align-items-center'>
-                <img src={imgb} className='imgB' alt='...' />
-              </div>
-              <div className='smallImgA d-flex justify-content-center align-items-center'>
-                <img src={imgc} className='imgB' alt='...' />
-              </div>
-              <div className='smallImgA d-flex justify-content-center align-items-center'>
-                <img src={imgd} className='imgB' alt='...' />
-              </div>
+            <div className='smallImgParent d-flex justify-content-evenly align-items-center'>
+              {product.images.map((img, index) => (
+                <div key={index} className="smallImgA d-flex justify-content-center align-items-center">
+                  <img
+                    src={img}
+                    alt={`Product ${index}`}
+                    style={{ width: '120px', height: '120px', borderRadius: '8px', objectFit: 'cover' }}
+                  />
+                </div>
+              ))}
             </div>
           </div>
 

@@ -7,6 +7,7 @@ import SignupOrLoginPage from './landingPage/Signup/SignupOrLoginPage';
 import { ToastContainer } from 'react-toastify';
 import CartTotalPage from './landingPage/CartTotal/CartTotalPage';
 import AddProductPage from './landingPage/AddProduct/AddProductPage';
+import EditProductPage from './landingPage/EditProduct/EditProductPage';
 
 
 const App = ()=>{
@@ -19,6 +20,7 @@ const App = ()=>{
       <Route path="/product/:id" element={<ViewPage />} />
       <Route path="/cart-total" element={<CartTotalPage/>} />
       <Route path="/add-product" element={<AddProductPage/>} />
+      <Route path="/edit-product/:id" element={<EditProductPage/>} />
     </Routes>
   </BrowserRouter>)
 }

@@ -1,19 +1,21 @@
 import React, { useContext } from 'react'
-import { CartContext } from './context/Cart';
-import { useNavigate } from 'react-router-dom';
+import { CartContext } from './context/Cart'
+import { Link, useNavigate } from 'react-router-dom'
+import { SearchContext } from './context/SearchContext'
 
 const Navbar = () => {
-  const { cartItems, currentUser, logout } = useContext(CartContext);
-  const navigate = useNavigate();
+  const { cartItems, currentUser, logout } = useContext(CartContext)
+  const navigate = useNavigate()
+  const { searchQuery, setSearchQuery } = useContext(SearchContext)
 
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
-  const handleCartClick = (e) => {
-    e.preventDefault();
+  const handleCartClick = e => {
+    e.preventDefault()
     if (currentUser) {
-      navigate('/cart-total');
+      navigate('/cart-total')
     } else {
-      navigate('/login');
+      navigate('/login')
     }
   }
 
@@ -38,13 +40,16 @@ const Navbar = () => {
           </span>
         </div>
       </div>
-      
 
       <nav class='navbar navbar-expand-lg bg-body-tertiary '>
         <div class='container-fluid '>
-          <a class='navbar-brand ms-5' href='#'>
-          <i class="fa fa-lg fa-shopping-cart iconColorN ms-5 me-2" aria-hidden="true"></i>&nbsp;QwikCart
-          </a>
+          <Link class='navbar-brand ms-5' to='/'>
+            <i
+              class='fa fa-lg fa-shopping-cart iconColorN ms-5 me-2'
+              aria-hidden='true'
+            ></i>
+            &nbsp;QwikCart
+          </Link>
           <button
             class='navbar-toggler'
             type='button'
@@ -58,33 +63,10 @@ const Navbar = () => {
           </button>
           <div class='collapse navbar-collapse ' id='navbarNavDropdown'>
             <ul class='navbar-nav small ms-5'>
-                <li class='nav-item dropdown '>
-                <a
-                  class='nav-link dropdown-toggle'
-                  href='#'
-                  role='button'
-                  data-bs-toggle='dropdown'
-                  aria-expanded='false'
-                >
-                  Dropdown link
-                </a>
-                <ul class='dropdown-menu'>
-                  <li>
-                    <a class='dropdown-item' href='#'>
-                      Action
-                    </a>
-                  </li>
-                  <li>
-                    <a class='dropdown-item' href='#'>
-                      Another action
-                    </a>
-                  </li>
-                  <li>
-                    <a class='dropdown-item' href='#'>
-                      Something else here
-                    </a>
-                  </li>
-                </ul>
+              <li class='nav-item '>
+                <Link class='nav-link' to='/add-product'>
+                  Add new Product
+                </Link>
               </li>
               <li class='nav-item ms-3'>
                 <a class='nav-link' aria-current='page' href='#'>
@@ -100,38 +82,51 @@ const Navbar = () => {
                 <a class='nav-link' href='#'>
                   Delivery
                 </a>
-              </li>  
-            
-            <form class="d-flex justify-content-end align-items-center" role="search">
-        <input class="form-control me-5 searchNav ms-5" type="search" placeholder="Search" aria-label="Search"/>
-        {/* <i class="fa fa-search searchIcon me-3 text-muted cursor" onClick={submitHandler} aria-hidden="true"></i> */}
-        {/* <button class="btn btn-outline-success" type="submit">search</button> */}
-      </form>
-      <li className='nav-item ms-4'>
+              </li>
+
+              <form
+                class='d-flex justify-content-end align-items-center'
+                role='search'
+                onSubmit={(e) => e.preventDefault()}
+              >
+                <input
+                  class='form-control me-5 searchNav ms-5'
+                  type='search'
+                  placeholder='Search'
+                  aria-label='Search'
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                {/* <i class="fa fa-search searchIcon me-3 text-muted cursor" onClick={submitHandler} aria-hidden="true"></i> */}
+                {/* <button class="btn btn-outline-success" type="submit">search</button> */}
+              </form>
+              <li className='nav-item ms-4'>
                 {currentUser ? (
-                  <button
-                    className='btn btn-link nav-link'
-                    onClick={logout}
-                  ><i class="fa fa-user-o" aria-hidden="true"></i> Logout
+                  <button className='btn btn-link nav-link' onClick={logout}>
+                    <i class='fa fa-user-o' aria-hidden='true'></i> Logout
                   </button>
                 ) : (
-                  <a className='nav-link' href='/login'>
-                    <i class="fa fa-user-o" aria-hidden="true"></i> Login
-                  </a>
+                  <Link className='nav-link' to='/login'>
+                    <i class='fa fa-user-o' aria-hidden='true'></i> Login
+                  </Link>
                 )}
               </li>
 
               <li class='nav-item ms-4'>
-                <a class='nav-link position-relative' href='/cart-total' onClick={handleCartClick}>
-                <i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart
-                {totalItems > 0 && (
-                <span className="position-absolute top-0 start-100 navTranslate badge rounded-pill bg-success">
-                  {totalItems}
-                </span>
-              )}
-                  </a>
+                <Link
+                  class='nav-link position-relative'
+                  to='/cart-total'
+                  onClick={handleCartClick}
+                >
+                  <i class='fa fa-shopping-cart' aria-hidden='true'></i> Cart
+                  {totalItems > 0 && (
+                    <span className='position-absolute top-0 start-100 navTranslate badge rounded-pill bg-success'>
+                      {totalItems}
+                    </span>
+                  )}
+                </Link>
               </li>
-      </ul>
+            </ul>
           </div>
         </div>
       </nav>

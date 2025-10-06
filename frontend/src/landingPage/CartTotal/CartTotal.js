@@ -39,7 +39,7 @@ const CartTotal = () => {
   )
 
   return (
-    <div style={{ margin: '40px' }}>
+    <div style={{ margin: '150px 40px 150px 40px' }}>
       <h2>Your Cart</h2>
       <table className='table table-bordered table-striped'>
         <thead>
