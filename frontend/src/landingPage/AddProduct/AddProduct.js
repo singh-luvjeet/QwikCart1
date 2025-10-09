@@ -90,7 +90,7 @@ const AddProduct = () => {
     <div className="container" style={{marginTop:"80px"}}>
       <h2 className="text-center mb-4">Add New Product</h2>
       <form onSubmit={formik.handleSubmit} className="w-50 mx-auto">
-        <div className="mb-3">
+        <div className="mb-3 form-floating">
           <input
             type="text"
             name="name"
@@ -100,13 +100,16 @@ const AddProduct = () => {
             onBlur={formik.handleBlur} // marks field as touched. If there’s a validation error, it can show it.
             value={formik.values.name}
           />
+          <label htmlFor="name" className=''>
+            Product Name
+          </label>
           {formik.touched.name && formik.errors.name && (
             <small className="text-danger">{formik.errors.name}</small>
           )}
         </div>
 
         {/* Description */}
-        <div className="mb-3">
+        <div className="mb-3 form-floating">
           <textarea
             name="description"
             className="form-control"
@@ -116,13 +119,16 @@ const AddProduct = () => {
             onBlur={formik.handleBlur}
             value={formik.values.description}
           />
+          <label htmlFor="description" className=''>
+            Product Description
+          </label>
           {formik.touched.description && formik.errors.description && (
             <small className="text-danger">{formik.errors.description}</small>
           )}
         </div>
 
         {/* Price */}
-        <div className="mb-3">
+        <div className="mb-3 form-floating">
           <input
             type="number"
             name="price"
@@ -132,6 +138,9 @@ const AddProduct = () => {
             onBlur={formik.handleBlur}
             value={formik.values.price}
           />
+          <label htmlFor="price" className=''>
+            $ Price
+          </label>
           {formik.touched.price && formik.errors.price && (
             <small className="text-danger">{formik.errors.price}</small>
           )}

@@ -287,6 +287,7 @@ heroCol1{
 
 /* Card */
 
+
 .card{
   animation-duration: 0.3s; /* the duration of the animation */
   animation-timing-function: ease-out; /* how the animation will behave */
@@ -313,6 +314,7 @@ heroCol1{
   height: 300px;
   background-color: #f6f6f6;
   border-radius: 10px;
+  object-fit: contain;
 }
 
 .dollar:before {
@@ -395,6 +397,10 @@ heroCol1{
 
 .cardStar .checked{
   color: green;
+}
+
+.cardStar .unchecked{
+  color:#dddddd;
 }
 
 .ulCard{
@@ -516,6 +522,7 @@ heroCol1{
   border-radius: 100%;
   position: relative;
   cursor: pointer;
+  
 }
 
 .paginationP{
@@ -530,19 +537,31 @@ heroCol1{
   color: white;
 }
 
+.paginationSelected{
+  background-color: #024a2d;
+  color: white;
+  height: 50px;
+  width: 50px; 
+  margin: 5px;
+  border-radius: 100%;
+  position: relative;
+  cursor: pointer;
+}
+
 
 
 /* View */
 /* Hero */
 
 .viewHeroImageDiv{
-  height: 70vh;
+  height: 80vh;
   width: 40vw;
   background-color: #f6f6f6;
 }
 
 .imgA{
   width: 80%;
+  object-fit: cover !important;
 }
 
 .smallImgParent{
@@ -618,7 +637,7 @@ heroCol1{
 .viewBtn:hover{
   border: 0.4px solid black;
   
-  margin-left: -10px;
+  /* margin-left: -10px; */
   border-radius: 30px;
   
 }

@@ -64,25 +64,21 @@ const Navbar = () => {
           <div class='collapse navbar-collapse ' id='navbarNavDropdown'>
             <ul class='navbar-nav small ms-5'>
               <li class='nav-item '>
-                <Link class='nav-link' to='/add-product'>
+              <Link class='nav-link' to='/add-product'>
                   Add new Product
                 </Link>
               </li>
               <li class='nav-item ms-3'>
-                <a class='nav-link' aria-current='page' href='#'>
-                  Deals
-                </a>
+              <Link class='nav-link' to='/address'>
+                  Your Addresses
+                </Link>
               </li>
               <li class='nav-item ms-3'>
-                <a class='nav-link' href='#'>
-                  What's New
-                </a>
+              <Link class='nav-link' to='/cart-total'>
+                  Your Orders
+                  </Link>
               </li>
-              <li class='nav-item ms-3 me-4'>
-                <a class='nav-link' href='#'>
-                  Delivery
-                </a>
-              </li>
+
 
               <form
                 class='d-flex justify-content-end align-items-center'

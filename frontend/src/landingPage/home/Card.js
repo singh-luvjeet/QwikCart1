@@ -1,138 +1,198 @@
-import React, { useState, useEffect, useContext } from 'react';
-import image8 from '../../assets/headphone.png';
-import img9 from '../../assets/favorite.png';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { CartContext } from '../context/Cart';
-import { toast } from 'react-toastify';
-import { SearchContext } from '../context/SearchContext';
+import React, { useState, useEffect, useContext } from 'react'
+import image8 from '../../assets/headphone.png'
+import img9 from '../../assets/favorite.png'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { CartContext } from '../context/Cart'
+import { toast } from 'react-toastify'
+import { SearchContext } from '../context/SearchContext'
+import Pagination from './pagination'
 
 const Card = () => {
   const [allCards, setAllCards] = useState([]);
-  const { addToCart, currentUser } = useContext(CartContext);
-  const { searchQuery } = useContext(SearchContext);
-  const navigate = useNavigate();
+  const [current, setCurrent] = useState(1);
+  const { addToCart, currentUser } = useContext(CartContext)
+  const { searchQuery } = useContext(SearchContext)
+  const navigate = useNavigate()
+
+  // useEffect(() => {
+  //   const backendURL = 'http://localhost:4000';
+  //   axios.get(`${backendURL}/cards`).then(res => setAllCards(res.data));
+  // }, []);
+
+  console.log(current, "currenttyyyyyyyy")
+  const handlePageChange = (current) => {
+    setCurrent(current);
+  }
+
+  let skip = (current - 1)*12;
+
+  
+  const fetchData = () => {
+    axios
+  .get(`https://dummyjson.com/products?limit=12&skip=${skip}`)
+  .then(res => {
+    return setAllCards(res.data.products)
+  });
+  }
+
+
+  const mappedProduct = allCards.map(product => {
+    let AvgRating;
+    let sum = 0;
+    for(let i=0; i<product.reviews.length; i++){
+      sum += product.reviews[i].rating;
+    }
+    AvgRating = sum/product.reviews.length;
+    return {
+      id: product.id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      stock: product.stock,
+      brand: product.brand,
+      images: product.images,
+      AvgRating: AvgRating,
+      ratingLength: product.reviews.length
+    }
+  })
+
 
   useEffect(() => {
-    const backendURL = 'http://localhost:4000';
-    axios.get(`${backendURL}/cards`).then(res => setAllCards(res.data));
-  }, []);
+    fetchData();
+  }, [current])
+
+  
+  
 
   const changeColor = id => {
     const updatedCard = allCards.map(card =>
       card._id === id ? { ...card, liked: !card.liked } : card
-    );
-    setAllCards(updatedCard);
-  };
+    )
+    setAllCards(updatedCard)
+  }
 
   const handleAddToCart = card => {
     if (!currentUser) {
-      toast.info('Please login to add items to cart', { position: 'top-right' });
-      navigate('/login');
-      return;
+      toast.info('Please login to add items to cart', { position: 'top-right' })
+      navigate('/login')
+      return
     }
-    addToCart(card, 1);
-  };
+    addToCart(card, 1)
+  }
 
   const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to delete this product?')) return;
+    if (!window.confirm('Are you sure you want to delete this product?')) return
     try {
-      await axios.delete(`http://localhost:4000/cards/${id}/delete`, { withCredentials: true });
-      setAllCards(prev => prev.filter(card => card._id !== id));
-      toast.success('Product deleted successfully', { position: 'top-right' });
+      await axios.delete(`http://localhost:4000/cards/${id}/delete`, {
+        withCredentials: true
+      })
+      setAllCards(prev => prev.filter(card => card._id !== id))
+      toast.success('Product deleted successfully', { position: 'top-right' })
     } catch (err) {
-      console.error(err);
-      toast.error('Failed to delete product', { position: 'top-right' });
+      console.error(err)
+      toast.error('Failed to delete product', { position: 'top-right' })
     }
-  };
+  }
 
-  const filteredCards = allCards.filter(card =>
-    card.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // const filteredCards = allCards.filter(card =>
+  //   card.name.toLowerCase().includes(searchQuery.toLowerCase())
+  // )
 
-  const cardItems = filteredCards.map(card => {
-    const isOwner = currentUser && currentUser._id === card.owner; // check ownership
+  // const cardItems = filteredCards.map(card => {
+    const cardItems = mappedProduct.map(card => {
+    const isOwner = currentUser && currentUser._id === card.owner // check ownership
     return (
       <li key={card._id}>
-        <div className="card cardWidth border border-0 m-2">
+        <div className='card cardWidth border border-0 m-2 '>
           <div style={{ position: 'relative' }}>
-            <Link to={`/product/${card._id}`}>
+            <Link to={`/product/${card.id}`}>
               <img
                 src={card.images?.[0] || image8}
-                loading="lazy"
-                className="card-img-top cardImg"
+                loading='lazy'
+                className='card-img-top cardImg'
                 onError={e => (e.target.src = image8)}
-                alt="..."
+                alt='...'
               />
             </Link>
-            <div className="heartDiv"></div>
+            <div className='heartDiv'></div>
             {card.liked ? (
               <img
                 src={img9}
-                className="redHeart"
+                className='redHeart'
                 onClick={() => changeColor(card._id)}
               />
             ) : (
               <i
-                className="fa fa-heart-o cardHeart"
+                className='fa fa-heart-o cardHeart'
                 onClick={() => changeColor(card._id)}
-                aria-hidden="true"
+                aria-hidden='true'
               ></i>
             )}
           </div>
 
-          <div className="card-body">
-            <div className="d-flex justify-content-between cardDiv">
-              <h6 className="card-title mt-1 fw-semibold">{card.name}</h6>
-              <p className="dollar fw-semibold">
+          <div className='card-body'>
+            <div className='d-flex justify-content-between cardDiv'>
+              <h6 className='card-title mt-1 fw-semibold'>{card.title}</h6>
+              <p className='dollar fw-semibold'>
                 {card.price}
-                <span className="zeros"></span>
+                <span className='zeros'></span>
               </p>
             </div>
 
-            <p className="card-text text-muted cardP">{card.description}</p>
+            <p className='card-text text-muted cardP'>{`${card.description.slice(0,65)+"..."}`}</p>
 
-            <div className="cardStar">
-              <span className="fa fa-star checked"></span>
-              <span className="fa fa-star checked"></span>
-              <span className="fa fa-star checked"></span>
-              <span className="fa fa-star checked"></span>
-              <span className="fa fa-star checked"></span>&nbsp;
-              <span className="text-muted">(121)</span>
+            <div className='cardStar'>
+               
+                {[1,2,3,4,5].map((i)=>(<span key={i} className={`fa fa-star ${card.AvgRating>=i?"checked":"unchecked"}`}></span>))}
+            
+              
+              {/* <span className={`fa fa-star ${card.AvgRating>=1?"checked":"unchecked"}`}></span>
+              <span className={`fa fa-star ${card.AvgRating>=1?"checked":"unchecked"}></span>
+              <span className={`fa fa-star ${card.AvgRating>=1?"checked":"unchecked"}></span>
+              <span className={`fa fa-star ${card.AvgRating>=1?"checked":"unchecked"}></span>
+              <span className={`fa fa-star ${card.AvgRating>=1?"checked":"unchecked"}></span>&nbsp; */}
+              <span className='text-muted'>&nbsp;({card.ratingLength})</span>
             </div>
 
             {isOwner ? (
-              <div className="d-flex justify-content-between">
+              <div className='d-flex justify-content-between'>
                 <button
-                  className="btn cardBtnEdit  mt-2" 
+                  className='btn cardBtnEdit  mt-2'
                   onClick={() => navigate(`/edit-product/${card._id}`)}
                 >
                   Edit
                 </button>
                 <button
-                  className="btn cardBtnDelete mt-2" 
+                  className='btn cardBtnDelete mt-2'
                   onClick={() => handleDelete(card._id)}
                 >
                   Delete
                 </button>
               </div>
             ) : (
-              <button className="btn cardBtn mt-2" onClick={() => handleAddToCart(card)}>
+              <button
+                className='btn cardBtn mt-2'
+                onClick={() => handleAddToCart(card)}
+              >
                 Add to Cart
               </button>
             )}
           </div>
         </div>
       </li>
-    );
-  });
+    )
+  })
 
   return (
-    <div className="cardsContainer">
-      <h3 className="h3Card fw-semibold">Headphones For You!</h3>
-      <ul className="ulCard d-flex flex-wrap mb-5">{cardItems}</ul>
+    <>
+    <div className='cardsContainer'>
+      <h3 className='h3Card fw-semibold'>Headphones For You!</h3>
+      <ul className='ulCard d-flex flex-wrap mb-5'>{cardItems}</ul>
     </div>
-  );
-};
+    <Pagination onClick = {handlePageChange} current = {current} allProduct={allCards}/>
+    </>
+  )
+}
 
-export default Card;
+export default Card

@@ -8,12 +8,15 @@ import { ToastContainer } from 'react-toastify';
 import CartTotalPage from './landingPage/CartTotal/CartTotalPage';
 import AddProductPage from './landingPage/AddProduct/AddProductPage';
 import EditProductPage from './landingPage/EditProduct/EditProductPage';
+import AddressListPage from './landingPage/Address/AddressListPage';
+import ScrollToTop from './landingPage/ScrollToTop';
 
 
 const App = ()=>{
   return(
   <BrowserRouter>
   <ToastContainer/>
+  <ScrollToTop/>
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<SignupOrLoginPage/>} />
@@ -21,6 +24,7 @@ const App = ()=>{
       <Route path="/cart-total" element={<CartTotalPage/>} />
       <Route path="/add-product" element={<AddProductPage/>} />
       <Route path="/edit-product/:id" element={<EditProductPage/>} />
+      <Route path="/address" element={<AddressListPage/>} />
     </Routes>
   </BrowserRouter>)
 }

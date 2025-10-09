@@ -13,7 +13,6 @@ const HomePage = () => {
             <Hero />
             <Filters />
             <Card/>
-            <Pagination/>
             <Footer/>
         </>
     )
