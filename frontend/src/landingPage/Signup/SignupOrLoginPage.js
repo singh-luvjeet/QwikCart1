@@ -4,8 +4,6 @@ import image2 from '../../assets/img2.jpg';
 import image3 from '../../assets/img3.jpg';
 import Signup from './Signup';
 import Login from './Login';
-import Navbar from '../Navbar';
-import Footer from '../Footer';
 
 const  SignupOrLoginPage=()=> {
     const [toggle, setToggle] = useState(false);
@@ -16,7 +14,6 @@ const  SignupOrLoginPage=()=> {
     return (
       <>
 
-      <Navbar/>
 
       <div className='d-flex justify-content-center align-items-center containerParent'>
       <div className='container-md rounded  gradientC containerColor responsiveContainer'>
@@ -70,8 +67,6 @@ const  SignupOrLoginPage=()=> {
           </div> 
         </div>
       </div>
-
-      <Footer/>
         
       </>
     );

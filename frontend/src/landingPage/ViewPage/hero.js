@@ -72,6 +72,13 @@ const Hero = () => {
     addToCart(product, count)
   }
 
+  let AvgRating;
+    let sum = 0;
+    for(let i=0; i<product.reviews.length; i++){
+      sum += product.reviews[i].rating;
+    }
+    AvgRating = sum/product.reviews.length;
+
   return (
     <>
       <div className='container' style={{ marginTop: '10vh' }}>
@@ -118,12 +125,15 @@ const Hero = () => {
               className='cardStar mb-4'
               style={{ marginLeft: '0px', marginTop: '0px' }}
             >
-              <span class='fa fa-star checked'></span>
-              <span class='fa fa-star checked'></span>
-              <span class='fa fa-star checked'></span>
-              <span class='fa fa-star checked'></span>
-              <span class='fa fa-star checked'></span>&nbsp;
-              <span className='text-muted'>(121)</span>
+              {[1, 2, 3, 4, 5].map(i => (
+                <span
+                  key={i}
+                  className={`fa fa-star ${
+                    AvgRating >= i ? 'checked' : 'unchecked'
+                  }`}
+                ></span>
+              ))}&nbsp;
+              <span className='text-muted'>({product.reviews.length})</span>
             </div>
             <hr style={{ borderColor: '#f6dddd' }}></hr>
             <h4 className='fw-semibold mt-3'>${product.price}</h4>

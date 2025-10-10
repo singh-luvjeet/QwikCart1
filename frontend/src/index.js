@@ -5,14 +5,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { CartProvider } from './landingPage/context/Cart';
 import { SearchProvider } from './landingPage/context/SearchContext';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
+const clientId = "144563076261-dn1lnei7eram10465q5vfel8lvn74u1n.apps.googleusercontent.com";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <SearchProvider>
     <CartProvider>
+      <GoogleOAuthProvider clientId={clientId}>
       <App/>
+      </GoogleOAuthProvider>
     </CartProvider>
     </SearchProvider>
   </React.StrictMode>

@@ -76,6 +76,8 @@ const AddProduct = () => {
     setSelectedFiles(prev => [...prev, ...files]);
     // Update previews
     const previews = files.map(file => URL.createObjectURL(file));
+    //URL.createObjectURL(file) -> Creates a temporary preview URL for a file.
+    //When a user selects a file using an <input type="file">, that file only exists locally on their computer — it’s not uploaded to your website yet.If you want to show a preview (for example, display an image thumbnail before uploading it), you need a way for the browser to access that local file.
     setImagePreviews(prev => [...prev, ...previews]);
   };
 

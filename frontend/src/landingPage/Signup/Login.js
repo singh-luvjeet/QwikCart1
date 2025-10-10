@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import '../../App.css'
 import image4 from '../../assets/go.png'
 import image5 from '../../assets/gi.png'
@@ -11,12 +11,60 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { CartContext } from '../context/Cart'
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google'
+
+const clientId = "144563076261-dn1lnei7eram10465q5vfel8lvn74u1n.apps.googleusercontent.com";
 
 const Login = ({ setToggle }) => {
+
   const { setCurrentUser } = useContext(CartContext);
   const navigate = useNavigate();
   const [type, setType] = useState('password')
   const [icon, setIcon] = useState(FaEyeSlash)
+
+
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      console.log("Google access token:", tokenResponse.access_token);
+  
+      // Get user info from Google
+      const userInfoRes = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+        headers: {
+          Authorization: `Bearer ${tokenResponse.access_token}`,
+        },
+      });
+  
+      const userInfo = await userInfoRes.json();
+      console.log("Google user info:", userInfo);
+      const res = await fetch("http://localhost:4000/google-auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        //credentials: "include" -> Tells the browser to send and accept cookies for cross-origin requests
+        //same as withCredentials:true for axios
+        body: JSON.stringify({
+          email: userInfo.email,
+          firstName: userInfo.given_name,
+          lastName: userInfo.family_name,
+        }),
+      });
+  
+      const data = await res.json();
+      console.log("Backend response:", data);
+
+      if (data.success) {
+        setCurrentUser(data.user);
+        toast.success("Google Sign-in Successful", { position: "top-right" });
+        setTimeout(() => navigate("/"), 1000);
+      } else {
+        toast.error(data.error || "Google Sign-in Failed", { position: "top-right" });
+      }
+    },
+  });
+  
+
+
+
   const handleToggle = () => {
     if (type === 'password') {
       setIcon(FaEye)
@@ -60,7 +108,10 @@ const Login = ({ setToggle }) => {
       try {
         const { data } = await axios.post(
           "http://localhost:4000/login",
-            values,
+            {
+              email:values.email.toLowerCase(),
+              password:values.password
+            },
           { withCredentials: true }
         );
         console.log(data);
@@ -151,7 +202,8 @@ const Login = ({ setToggle }) => {
         </p>
 
         <div className='d-flex justify-content-center align-items-center'>
-          <img src={image4} className='google ' alt='..' />
+          
+          <img src={image4} onClick={() => login()} style={{ cursor: "pointer" }} className='google' alt='..' />
           <img src={image5} className='github ' alt='..' />
           <img src={image6} className='facebook' alt='..' />
         </div>
@@ -161,4 +213,4 @@ const Login = ({ setToggle }) => {
   )
 }
 
-export default React.memo(Login)
+export default Login

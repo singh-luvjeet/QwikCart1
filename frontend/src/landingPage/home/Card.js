@@ -20,54 +20,46 @@ const Card = () => {
   //   axios.get(`${backendURL}/cards`).then(res => setAllCards(res.data));
   // }, []);
 
-  console.log(current, "currenttyyyyyyyy")
   const handlePageChange = (current) => {
     setCurrent(current);
   }
 
   let skip = (current - 1)*12;
 
-  
-  const fetchData = () => {
-    axios
-  .get(`https://dummyjson.com/products?limit=12&skip=${skip}`)
-  .then(res => {
-    return setAllCards(res.data.products)
-  });
+  const fetchData = async () => {
+  const res = await axios.get(`https://dummyjson.com/products?limit=12&skip=${skip}`);
+  const mappedProduct = await res.data.products.map(product => {
+      let AvgRating;
+      let sum = 0;
+      for(let i=0; i<product.reviews.length; i++){
+        sum += product.reviews[i].rating;
+      }
+      AvgRating = sum/product.reviews.length;
+      return {
+        id: product.id,
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        stock: product.stock,
+        brand: product.brand,
+        images: product.images,
+        AvgRating: AvgRating,
+        ratingLength: product.reviews.length
+      }
+    })
+    setAllCards(mappedProduct);
   }
 
-
-  const mappedProduct = allCards.map(product => {
-    let AvgRating;
-    let sum = 0;
-    for(let i=0; i<product.reviews.length; i++){
-      sum += product.reviews[i].rating;
-    }
-    AvgRating = sum/product.reviews.length;
-    return {
-      id: product.id,
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      stock: product.stock,
-      brand: product.brand,
-      images: product.images,
-      AvgRating: AvgRating,
-      ratingLength: product.reviews.length
-    }
-  })
 
 
   useEffect(() => {
     fetchData();
   }, [current])
 
-  
-  
 
   const changeColor = id => {
     const updatedCard = allCards.map(card =>
-      card._id === id ? { ...card, liked: !card.liked } : card
+      card.id === id ? { ...card, liked: !card.liked } : card
     )
     setAllCards(updatedCard)
   }
@@ -100,10 +92,10 @@ const Card = () => {
   // )
 
   // const cardItems = filteredCards.map(card => {
-    const cardItems = mappedProduct.map(card => {
+    const cardItems = allCards.map(card => {
     const isOwner = currentUser && currentUser._id === card.owner // check ownership
     return (
-      <li key={card._id}>
+      <li key={card.id}>
         <div className='card cardWidth border border-0 m-2 '>
           <div style={{ position: 'relative' }}>
             <Link to={`/product/${card.id}`}>
@@ -120,12 +112,12 @@ const Card = () => {
               <img
                 src={img9}
                 className='redHeart'
-                onClick={() => changeColor(card._id)}
+                onClick={() => changeColor(card.id)}
               />
             ) : (
               <i
                 className='fa fa-heart-o cardHeart'
-                onClick={() => changeColor(card._id)}
+                onClick={() => changeColor(card.id)}
                 aria-hidden='true'
               ></i>
             )}
@@ -187,10 +179,10 @@ const Card = () => {
   return (
     <>
     <div className='cardsContainer'>
-      <h3 className='h3Card fw-semibold'>Headphones For You!</h3>
+      <h3 className='h3Card fw-semibold'>Products For You!</h3>
       <ul className='ulCard d-flex flex-wrap mb-5'>{cardItems}</ul>
     </div>
-    <Pagination onClick = {handlePageChange} current = {current} allProduct={allCards}/>
+    <Pagination onClick = {handlePageChange} current = {current} />
     </>
   )
 }

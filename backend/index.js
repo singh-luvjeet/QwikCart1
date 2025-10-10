@@ -8,9 +8,13 @@ const cookieParser = require('cookie-parser')
 const authMiddleware = require('./Middlewares/Auth')
 const Card = require('./Models/Card')
 const Cart = require('./Models/Cart')
+const User = require("./Models/UserModel")
 const multer = require('multer')
 const { storage } = require('./cloudConfig')
 const upload = multer({ storage })
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client("144563076261-dn1lnei7eram10465q5vfel8lvn74u1n.apps.googleusercontent.com");
+const { createSecretToken } = require('./util/SecretToken');
 
 const PORT = 4000
 
@@ -29,9 +33,53 @@ app.use(
 
 app.use(cookieParser())
 app.use(express.json())
+app.use(express.urlencoded({
+  extended: true
+}))
 
 app.use('/', authRoute)
 app.use('/address', addressRoute);
+
+app.post("/google-auth", async (req, res) => {
+  const { email, firstName, lastName } = req.body;
+  console.log({ email, firstName, lastName})
+
+  try {
+    if (!email) {
+      return res.status(400).json({ error: "Missing email from Google response" });
+    }
+
+    let user = await User.findOne({ email });
+    console.log("user", {user})
+    if (!user) {
+      console.log("creating user")
+      user = await User.create({
+        email,
+        firstName,
+        lastName,
+        authSource: "google",
+      });
+    }
+
+    console.log(user, "user google")
+const token = createSecretToken(user._id)
+console.log(token, "google token")
+    res.cookie('token', token, {
+      httpOnly: true, //JS can’t access the cookie
+      sameSite: "lax", //sent on same-site requests
+      secure: false, //works over HTTP (not just HTTPS)
+      maxAge: 7 * 24 * 60 * 60 * 1000  
+    })
+    res
+      .status(201)
+      .json({ message: 'Google sign in successfully', success: true, user })
+  } catch (err) {
+    console.error("Error during Google Authentication:", err);
+    res.status(400).json({ error: "Authentication failed" });
+  }
+});
+
+
 
 app.get('/cards', async (req, res) => {
   try {

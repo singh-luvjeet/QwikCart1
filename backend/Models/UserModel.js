@@ -17,16 +17,25 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "Your password is required"],
+    required: function () {
+      return this.authSource === "self";
+    },
   },
   createdAt: {
     type: Date,
     default: new Date(),
   },
+  authSource: {
+    type: String,
+    enum: ["self", "google"],
+    default: "self"
+  }
 });
 
 userSchema.pre("save", async function () {
-  this.password = await bcrypt.hash(this.password, 12);
+  if (this.password) {
+    this.password = await bcrypt.hash(this.password, 12);
+  }
 });
 
 module.exports = mongoose.model("User", userSchema);

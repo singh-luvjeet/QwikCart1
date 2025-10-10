@@ -17,7 +17,7 @@ const cardSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    images: [   // 👈 Changed from 'image' to 'images'
+    images: [   
         {
           type: String,
           required: true,
