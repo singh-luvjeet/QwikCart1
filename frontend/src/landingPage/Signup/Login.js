@@ -40,7 +40,7 @@ const Login = ({ setToggle }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        //credentials: "include" -> Tells the browser to send and accept cookies for cross-origin requests
+        //credentials: "include" -> ensures cookies (JWT token) are sent and received properly.
         //same as withCredentials:true for axios
         body: JSON.stringify({
           email: userInfo.email,
@@ -118,6 +118,7 @@ const Login = ({ setToggle }) => {
         const { success, message, user } = data;
         if (success) {
           setCurrentUser(user);
+          console.log(user, "user from login")
           handleSuccess(message);
           setTimeout(() => {
             navigate("/");

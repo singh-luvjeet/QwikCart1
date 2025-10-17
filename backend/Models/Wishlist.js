@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const cartSchema = new mongoose.Schema({
+const wishlistSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -9,18 +9,14 @@ const cartSchema = new mongoose.Schema({
   items: [
     {
       productId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Card",
-        required: true,
-      },
-      quantity: {
         type: Number,
+        ref: "Card",
+        // localField: 'productId',
+        // foreignField: 'id',
         required: true,
-        min: 1,
-        default: 1,
       },
     },
   ],
 }, { timestamps: true });
 
-module.exports = mongoose.model("Cart", cartSchema);
+module.exports = mongoose.model("Wishlist", wishlistSchema);

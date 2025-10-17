@@ -98,9 +98,11 @@ const Navbar = () => {
               </form>
               <li className='nav-item ms-4'>
                 {currentUser ? (
-                  <button className='btn btn-link nav-link' onClick={logout}>
-                    <i class='fa fa-user-o' aria-hidden='true'></i> Logout
+                  <Link to="/profile" style={{textDecoration:"none"}}>
+                  <button className='btn btn-link nav-link'>
+                    <i class='fa fa-user-o' aria-hidden='true'></i> Your Profile
                   </button>
+                  </Link>
                 ) : (
                   <Link className='nav-link' to='/login'>
                     <i class='fa fa-user-o' aria-hidden='true'></i> Login

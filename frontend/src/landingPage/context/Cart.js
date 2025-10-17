@@ -6,6 +6,7 @@ export const CartContext = createContext()
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([])
+  const [wishlistItems, setWishlistItems] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
   const [loadingUser, setLoadingUser] = useState(true)
 
@@ -64,6 +65,27 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const addToWishlist = async(product, liked) => {
+    if (!currentUser){
+      console.log("No user logged in, cannot add to cart")
+      return
+    } 
+    console.log(`Adding product ${product.id} to wishlist`);
+    try{
+        const res = await axios.post(
+        'http://localhost:4000/wishlist/add',
+        {productId: product.id, liked: !liked},
+        {withCredentials: true}
+      )
+
+      return res
+    }
+    catch(err){
+      console.error("Error adding to wishlist:", err)
+    }
+  }
+
+
   const addToCart = async (product, quantity) => {
     if (!currentUser){
       console.log("No user logged in, cannot add to cart")
@@ -83,8 +105,9 @@ export const CartProvider = ({ children }) => {
     }
   }
 
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, currentUser, setCurrentUser, logout, loadingUser  }}>
+    <CartContext.Provider value={{ cartItems, addToCart, currentUser, setCurrentUser, logout, loadingUser, wishlistItems, addToWishlist  }}>
       {children}
     </CartContext.Provider>
   )

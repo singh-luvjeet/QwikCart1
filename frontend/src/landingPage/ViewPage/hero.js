@@ -9,39 +9,40 @@ const Hero = () => {
   const [product, setProduct] = useState(null)
   const [selectedImg, setSelectedImg] = useState(0)
   const [loading, setLoading] = useState(true)
-  const { id } = useParams() // get the product id from URL
+  const { id } = useParams()
   const { addToCart, currentUser } = useContext(CartContext)
   const navigate = useNavigate()
-
-  // useEffect(() => {
-  //   const fetchProduct = async () => {
-  //     try {
-  //       const response = await axios.get(`http://localhost:4000/cards/${id}`);
-  //       setProduct(response.data);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.error("Error fetching product:", error);
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchProduct();
-  // }, [id]);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`https://dummyjson.com/products/${id}`)
-        console.log(response, 'view response')
-        setProduct(response.data)
+        const response = await axios.get(`http://localhost:4000/cards/${id}`);
+        setProduct(response.data);
+        setLoading(false);
         setCount(response?.data?.minimumOrderQuantity)
-        setLoading(false)
       } catch (error) {
-        console.error('Error fetching product:', error)
-        setLoading(false)
+        console.error("Error fetching product:", error);
+        setLoading(false);
       }
-    }
-    fetchProduct()
-  }, [id])
+    };
+    fetchProduct();
+  }, [id]);
+
+  // useEffect(() => {
+  //   const fetchProduct = async () => {
+  //     try {
+  //       const response = await axios.get(`https://dummyjson.com/products/${id}`)
+  //       console.log(response, 'view response')
+  //       setProduct(response.data)
+  //       setCount(response?.data?.minimumOrderQuantity)
+  //       setLoading(false)
+  //     } catch (error) {
+  //       console.error('Error fetching product:', error)
+  //       setLoading(false)
+  //     }
+  //   }
+  //   fetchProduct()
+  // }, [id])
 
   if (loading) return <div>Loading...</div>
   if (!product) return <div>Product not found</div>
@@ -66,18 +67,18 @@ const Hero = () => {
   const handleAddToCart = () => {
     if (!currentUser) {
       toast.info('Please login to add items to cart', { position: 'top-right' })
-      navigate('/login') // redirect to login
+      navigate('/login')
       return
     }
     addToCart(product, count)
   }
 
-  let AvgRating;
-    let sum = 0;
-    for(let i=0; i<product.reviews.length; i++){
-      sum += product.reviews[i].rating;
-    }
-    AvgRating = sum/product.reviews.length;
+  // let AvgRating;
+  //   let sum = 0;
+  //   for(let i=0; i<product.reviews.length; i++){
+  //     sum += product.reviews[i].rating;
+  //   }
+  //   AvgRating = sum/product.reviews.length;
 
   return (
     <>
@@ -129,11 +130,18 @@ const Hero = () => {
                 <span
                   key={i}
                   className={`fa fa-star ${
-                    AvgRating >= i ? 'checked' : 'unchecked'
+                    product.AvgRating >= i ? 'checked' : 'unchecked'
                   }`}
                 ></span>
-              ))}&nbsp;
-              <span className='text-muted'>({product.reviews.length})</span>
+                
+              ))}
+              {/* <span className="fa fa-star checked"></span>
+              <span className="fa fa-star checked"></span>
+              <span className="fa fa-star checked"></span>
+              <span className="fa fa-star checked"></span>
+              <span className="fa fa-star unchecked"></span> */}
+              &nbsp;
+              <span className='text-muted'>(3)</span>
             </div>
             <hr style={{ borderColor: '#f6dddd' }}></hr>
             <h4 className='fw-semibold mt-3'>${product.price}</h4>
@@ -188,7 +196,7 @@ const Hero = () => {
             <div className='d-flex justify-content-start'>
               <button
                 class='btn viewBtn'
-                onClick={() => handleAddToCart(product)}
+                onClick={() => handleAddToCart()}
                 style={{
                   marginRight: '40px',
                   marginLeft: '3px',

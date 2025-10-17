@@ -1,14 +1,33 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../Button'
+import axios from 'axios';
 
-const Filters = () => {
+const Filters = ({priceSort, setPriceSort, selectedRating, handleRatingChange}) => {
+
+  
+  console.log("priceSort>>", priceSort)
+
   return (
     <>
       <div className='d-flex justify-content-between align-items-center filterDiv'>
         <div style={{ margin: '50px 0 0 75px' }}>
           <Button class name='Headphone Type' />
-          <Button name='Price' />
-          <Button name='Review' />
+          {/* <Button name='Price' /> */}
+
+          <select onChange={(e) => setPriceSort(e.target.value)}>
+            <option value="asc">Price: Low to High</option>
+            <option value="desc">Price: High to Low</option>
+          </select>
+
+          {/* <Button name='Review' /> */}
+
+          <select id="rating-filter" value={selectedRating} onChange={handleRatingChange}>
+            <option value="all">All Ratings</option>
+            <option value="2">2 Stars & Up</option>
+            <option value="3">3 Stars & Up</option>
+            <option value="4">4 Stars & Up</option>
+          </select>
+
           <Button name='Color' />
           <Button name='Material' />
           <Button name='Offer' />

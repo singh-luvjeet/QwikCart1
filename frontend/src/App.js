@@ -10,6 +10,7 @@ import AddProductPage from './landingPage/AddProduct/AddProductPage';
 import EditProductPage from './landingPage/EditProduct/EditProductPage';
 import AddressListPage from './landingPage/Address/AddressListPage';
 import ScrollToTop from './landingPage/ScrollToTop';
+import ProfilePage from './landingPage/Profile/ProfilePage';
 
 
 const App = ()=>{
@@ -25,6 +26,7 @@ const App = ()=>{
       <Route path="/add-product" element={<AddProductPage/>} />
       <Route path="/edit-product/:id" element={<EditProductPage/>} />
       <Route path="/address" element={<AddressListPage/>} />
+      <Route path="/profile" element={<ProfilePage/>} />
     </Routes>
   </BrowserRouter>)
 }

@@ -45,7 +45,8 @@ module.exports.Login = async (req, res) => {
     if (!auth) {
       return res.json({ message: 'Incorrect password or email' })
     }
-    const token = createSecretToken(user._id)
+    const token = createSecretToken(user._id);
+    // console.log('token', token)
     res.cookie('token', token, {
       httpOnly: true,
       sameSite: "lax",
@@ -74,3 +75,67 @@ module.exports.Logout = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+module.exports.changePassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body
+  console.log(req.user._id, 'changePAssworrrrrrrd')
+
+  const auth = await bcrypt.compare(oldPassword, req.user.password)
+  if (!auth) {
+    return res.json({ message: 'Incorrect password' })
+  }
+
+  const encryptedPassword = await bcrypt.hash(newPassword, 10)
+  await User.updateOne(
+    {
+      _id: req.user._id
+    },
+    {
+      $set: {
+        password: encryptedPassword
+      }
+    }
+  )
+
+  res.status(200).json({ message: 'Password changed successfully!' })
+};
+
+module.exports.googleAuth = async (req, res) => {
+  const { email, firstName, lastName } = req.body
+  console.log({ email, firstName, lastName })
+
+  try {
+    if (!email) {
+      return res
+        .status(400)
+        .json({ error: 'Missing email from Google response' })
+    }
+
+    let user = await User.findOne({ email })
+    console.log('user', { user })
+    if (!user) {
+      console.log('creating user')
+      user = await User.create({
+        email,
+        firstName,
+        lastName,
+        authSource: 'google'
+      })
+    }
+
+    // console.log(user, 'user google')
+    const token = createSecretToken(user._id)
+    res.cookie('token', token, {
+      httpOnly: true, //JS can’t access the cookie
+      sameSite: 'lax', //sent on same-site requests
+      secure: false, //works over HTTP (not just HTTPS)
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    })
+    res
+      .status(201)
+      .json({ message: 'Google sign in successfully', success: true, user })
+  } catch (err) {
+    console.error('Error during Google Authentication:', err)
+    res.status(400).json({ error: 'Authentication failed' })
+  }
+}

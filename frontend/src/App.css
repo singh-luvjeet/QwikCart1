@@ -415,6 +415,7 @@ heroCol1{
   top: 21px;
   background-color: white;
   border-radius: 100%;
+  cursor: pointer
 }
 
 .redHeart{
@@ -423,6 +424,7 @@ heroCol1{
   right: 14px;
   top: 16px;
   width: 10%;
+  cursor: pointer;
 }
 
 .heartActive{
@@ -661,3 +663,12 @@ heroCol1{
   border: 0.5px solid black;
 }
 
+/* Edit Form */
+
+.editImage{
+  width: 100px;
+  height: 100px;
+  color: black;
+  background-color: black;
+  border-radius: 100%;
+}

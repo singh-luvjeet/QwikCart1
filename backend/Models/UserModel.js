@@ -21,6 +21,9 @@ const userSchema = new mongoose.Schema({
       return this.authSource === "self";
     },
   },
+  profile_image:{
+    type:String,
+  },
   createdAt: {
     type: Date,
     default: new Date(),
