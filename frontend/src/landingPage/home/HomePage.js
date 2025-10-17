@@ -4,33 +4,50 @@ import Hero from './Hero'
 import Card from './Card'
 import Filters from './Filters'
 import Footer from '../Footer'
-import Pagination from './pagination'
 import axios from 'axios'
 
 const HomePage = () => {
   const [allCards, setAllCards] = useState([])
   const [priceSort, setPriceSort] = useState('')
-  const [selectedRating, setSelectedRating] = useState('all')
+  const [selectedRating, setSelectedRating] = useState(1)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const handleSearch = e => {
+    e.preventDefault()
+    
+  }
 
   const handleRatingChange = event => {
     setSelectedRating(event.target.value)
   }
 
-  const fetchData = async () => {
+  console.log('searchTerm', searchTerm)
+
+  const fetchData = async (page) => {
     const response = await axios.get(
-      `http://localhost:4000/cards?sort=${priceSort}`,
+      `http://localhost:4000/cards?sort=${priceSort}&keyword=${searchTerm}&rating=${selectedRating}&page=${page}&limit=12`,
       { withCredentials: true }
     )
-    setAllCards(response.data)
+    setAllCards(response.data.updatedCards)
+    setTotalPages(response.data.totalPages);
+    setCurrentPage(page);
   }
 
   useEffect(() => {
-    fetchData()
-  }, [priceSort])
+    fetchData(1)
+  }, [priceSort, searchTerm, selectedRating])
+
+  const handlePageChange = (page) => fetchData(page);
 
   return (
     <>
-      <Navbar />
+      <Navbar
+        handleSearch={handleSearch}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
       <Hero />
       <Filters
         priceSort={priceSort}
@@ -43,6 +60,9 @@ const HomePage = () => {
         allCards={allCards}
         fetchData={fetchData}
         selectedRating={selectedRating}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+        currentPage={currentPage}
       />
       <Footer />
     </>

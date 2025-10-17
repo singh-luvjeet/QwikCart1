@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Button from '../Button'
-import axios from 'axios';
 
 const Filters = ({priceSort, setPriceSort, selectedRating, handleRatingChange}) => {
 
@@ -22,7 +21,7 @@ const Filters = ({priceSort, setPriceSort, selectedRating, handleRatingChange}) 
           {/* <Button name='Review' /> */}
 
           <select id="rating-filter" value={selectedRating} onChange={handleRatingChange}>
-            <option value="all">All Ratings</option>
+            <option value="1">All Ratings</option>
             <option value="2">2 Stars & Up</option>
             <option value="3">3 Stars & Up</option>
             <option value="4">4 Stars & Up</option>

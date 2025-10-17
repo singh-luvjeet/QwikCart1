@@ -83,7 +83,7 @@ const CartTotal = () => {
                   style={{ accentColor: 'green', width: '20px', height: '20px' }}
                 />
               </td>
-              <td>{item.product.name}</td>
+              <td>{item.product.title}</td>
               <td>
                 <div className='cardStar d-flex justify-content-center align-items-end'>
                   <span className='fa fa-star checked'></span>

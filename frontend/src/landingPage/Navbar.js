@@ -1,12 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { CartContext } from './context/Cart'
 import { Link, useNavigate } from 'react-router-dom'
-import { SearchContext } from './context/SearchContext'
 
-const Navbar = () => {
-  const { cartItems, currentUser, logout } = useContext(CartContext)
+const Navbar = ({handleSearch, searchTerm, setSearchTerm}) => {
+  const { cartItems, currentUser } = useContext(CartContext)
   const navigate = useNavigate()
-  const { searchQuery, setSearchQuery } = useContext(SearchContext)
+  
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
@@ -18,6 +17,8 @@ const Navbar = () => {
       navigate('/login')
     }
   }
+
+  
 
   return (
     <>
@@ -83,15 +84,15 @@ const Navbar = () => {
               <form
                 class='d-flex justify-content-end align-items-center'
                 role='search'
-                onSubmit={(e) => e.preventDefault()}
+                onSubmit={handleSearch}
               >
                 <input
                   class='form-control me-5 searchNav ms-5'
                   type='search'
                   placeholder='Search'
                   aria-label='Search'
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 {/* <i class="fa fa-search searchIcon me-3 text-muted cursor" onClick={submitHandler} aria-hidden="true"></i> */}
                 {/* <button class="btn btn-outline-success" type="submit">search</button> */}

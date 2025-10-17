@@ -18,7 +18,6 @@ const client = new OAuth2Client(
   '144563076261-dn1lnei7eram10465q5vfel8lvn74u1n.apps.googleusercontent.com'
 )
 // const { createSecretToken } = require('./util/SecretToken')
-const bcrypt = require('bcryptjs')
 const path = require('path')
 const Wishlist = require('./Models/Wishlist')
 app.use(express.static(path.join(__dirname, 'public')))
@@ -85,11 +84,13 @@ app.get('/wishlists', authMiddleware, async (req, res) => {
       wishlist = { userId, items: [] }
     }
 
-    const productIds = wishlist.items.map(item => item.productId);
+    const productIds = wishlist.items.map(item => item.productId)
     // console.log(productIds);
-    const products = await Card.find({"id": { "$in": productIds }}).select('id title description images liked');
+    const products = await Card.find({ id: { $in: productIds } }).select(
+      'id title description images liked'
+    )
 
-    res.json({products})
+    res.json({ products })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
@@ -177,16 +178,24 @@ app.patch(
 )
 
 app.get('/cards', authMiddleware, async (req, res) => {
+
   try {
-    const {sort} = req.query;
-    // console.log("sort>>",)
-    let order=1;
+    const { sort, keyword, rating, limit, page } = req.query
+    // console.log("sort>>",sort)
+    let order = 1
     if (sort === 'asc') {
-     order=1
+      order = 1
     } else if (sort === 'desc') {
-      order=-1
+      order = -1
     }
     // console.log("order>>", order)
+
+
+  const Page = page || 1; // Default to page 1
+  const Limit = limit || 12;
+  const startIndex = (Page - 1) * Limit;
+  const total = await Card.countDocuments();
+  const totalPages = Math.ceil(total / limit)
 
     const userWishlist = await Wishlist.findOne({ userId: req.user._id })
     const likedProductIds = []
@@ -196,7 +205,18 @@ app.get('/cards', authMiddleware, async (req, res) => {
       })
     }
     // console.log("likedProducts>>", likedProductIds)
-    const cards = await Card.find().sort({price:order})
+    const cards = await Card
+    .find({
+      $or: [
+        { title: { $regex: keyword, $options: 'i' } },
+        { description: { $regex: keyword, $options: 'i' } }
+      ],
+      AvgRating: { $gte: rating }
+    })
+    .sort({ price: order })
+    .skip(startIndex)
+    .limit(Limit)
+//The $regex operator allows for powerful pattern matching beyond simple string equality, using regular expression syntax.
 
     const updatedCards = cards.map(card => {
       const isLiked = likedProductIds.includes(card.id)
@@ -209,9 +229,12 @@ app.get('/cards', authMiddleware, async (req, res) => {
 
     // console.log("Updated Cards>>", updatedCards)
 
-    res.json(updatedCards)
+    res.json({updatedCards,
+      totalPages,
+      currentPage: page})
   } catch (err) {
     res.status(500).json({ message: 'Server error' })
+    console.log(err)
   }
 })
 

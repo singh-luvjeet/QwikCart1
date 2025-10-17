@@ -5,15 +5,15 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { CartContext } from '../context/Cart'
 import { toast } from 'react-toastify'
-import { SearchContext } from '../context/SearchContext'
 import Pagination from './pagination'
 
-const Card = ({allCards, setAllCards, fetchData, selectedRating}) => {
+const Card = ({allCards, setAllCards, fetchData, totalPages,handlePageChange,currentPage}) => {
   // const [allCards, setAllCards] = useState([]);
-  const [current, setCurrent] = useState(1);
+  // const [current, setCurrent] = useState(1);
   // const [isLiked, setIsLiked] = useState(false);
   const { addToCart, currentUser, addToWishlist } = useContext(CartContext)
-  const { searchQuery } = useContext(SearchContext)
+  
+
   const navigate = useNavigate()
 
   // const fetchData = async() =>{
@@ -28,14 +28,14 @@ const Card = ({allCards, setAllCards, fetchData, selectedRating}) => {
 
   // }, [current]);
 
-  const handlePageChange = (current) => {
-    setCurrent(current);
-  }
+  // const handlePageChange = (current) => {
+  //   setCurrent(current);
+  // }
 
 //   let skip = (current - 1)*12;
 //   // ?limit=12&skip=${skip}
 //   const fetchData = async () => {
-//   const res = await axios.get(`https://dummyjson.com/products`);
+//   const res = await axios.get(`https://dummyjson.com/products?limit=30&skip=30`);
 //   console.log("full data>>",res.data.products)
 //   const mappedProduct = await res.data.products.map(product => {
 
@@ -74,9 +74,9 @@ const Card = ({allCards, setAllCards, fetchData, selectedRating}) => {
 // };
 
 
-  useEffect(() => {
-    fetchData();
-  }, [current])
+//   useEffect(() => {
+//     fetchData();
+//   }, [current])
 
 
   const changeColor = id => {
@@ -149,15 +149,15 @@ const Card = ({allCards, setAllCards, fetchData, selectedRating}) => {
 //     product.title.toLowerCase().includes(searchQuery.toLowerCase())
 // })
 
-const filteredCards = allCards.filter((product) => {
-  if (selectedRating === 'all') {
-    return true; // Show all products
-  }
-  return product.AvgRating >= selectedRating;
-});
+// const filteredCards = allCards.filter((product) => {
+//   if (selectedRating === 'all') {
+//     return true; // Show all products
+//   }
+//   return product.AvgRating >= selectedRating;
+// });
 
-  const cardItems = filteredCards.map(card => {
-    // const cardItems = allCards.map(card => {
+  // const cardItems = filteredCards.map(card => {
+    const cardItems = allCards.map(card => {
     const isOwner = currentUser && currentUser._id === card.owner // check ownership
     return (
       <li key={card.id}>
@@ -210,7 +210,7 @@ const filteredCards = allCards.filter((product) => {
               <span className={`fa fa-star checked`}></span>
               <span className={`fa fa-star checked`}></span>
               <span className={`fa fa-star ${card.AvgRating>=1?"checked":"unchecked"}`}></span>&nbsp; */}
-              <span className='text-muted'>&nbsp;({card.ratingLength})</span>
+              {/* <span className='text-muted'>&nbsp;({card.ratingLength})</span> */}
               <span className='text-muted'>&nbsp;(3)</span>
             </div>
 
@@ -250,7 +250,10 @@ const filteredCards = allCards.filter((product) => {
       {/* <button onClick={handleImportProducts}>button</button> */}
       <ul className='ulCard d-flex flex-wrap mb-5'>{cardItems}</ul>
     </div>
-    <Pagination onClick = {handlePageChange} current = {current} />
+    <Pagination
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+        currentPage={currentPage}/>
     </>
   )
 }
