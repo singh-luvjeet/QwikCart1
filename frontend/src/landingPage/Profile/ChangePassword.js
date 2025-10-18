@@ -87,9 +87,11 @@ const ChangePassword = () => {
     return (
     <>
        <form onSubmit={formik.handleSubmit}>
-               <h1 className=' text-center'>Change Password</h1>
+
+        <div className='px-5 m-5 '>
+               <h2 className=' text-center fw-semibold'>Change Password</h2>
        
-               <div className='mb-3'>
+               <div className='mb-4 mt-4'>
                  <label htmlFor='oldPassword' className='form-label '>
                   Old Password
                  </label>
@@ -116,7 +118,8 @@ const ChangePassword = () => {
                    <div className='errorMsg'>{formik.errors.oldPassword}</div>
                  ) : null}
                </div>
-
+                
+               <div className='mb-4'>
                <label for='newPassword' className='form-label'>
                   New Password
                  </label>
@@ -142,8 +145,9 @@ const ChangePassword = () => {
                 {formik.touched.newPassword && formik.errors.newPassword ? (
                     <div className='errorMsg'>{formik.errors.newPassword}</div>
                 ) : null}
-            
-                
+            </div>
+
+              <div className='mb-4'>
             <label for='confirmPassword' className='form-label'>
                   Confirm Password
                  </label>
@@ -169,14 +173,15 @@ const ChangePassword = () => {
                     {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
                         <div className='errorMsg'>{formik.errors.confirmPassword}</div>
                     ) : null}
-                
+                </div>
                        
                <div className='d-grid gap-2 buttonDiv'>
-                 <button className='btn buttonColor btn-sm mb-4' type='Submit'>
+                 <button className='btn btn-success' type='Submit'>
                    Submit
                  </button>
                </div>
     
+               </div>
         </form>
     </>
     )

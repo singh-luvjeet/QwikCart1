@@ -16,17 +16,20 @@ const Hero = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/cards/${id}`);
-        setProduct(response.data);
+        const response = await axios.get(`http://localhost:4000/cards/${id}`, {withCredentials: true});
+        setProduct(response?.data?.card);
         setLoading(false);
-        setCount(response?.data?.minimumOrderQuantity)
+        // console.log('response?.data?.card?.minimumOrderQuantity', response?.data?.card?.minimumOrderQuantity)
+        setCount(response?.data?.card?.minimumOrderQuantity)
       } catch (error) {
         console.error("Error fetching product:", error);
         setLoading(false);
       }
     };
     fetchProduct();
-  }, [id]);
+  }, [id, product]);
+
+  
 
   // useEffect(() => {
   //   const fetchProduct = async () => {
@@ -51,7 +54,7 @@ const Hero = () => {
     setSelectedImg(i)
   }
 
-  console.log(selectedImg, "selectedImg");
+  // console.log(selectedImg, "selectedImg");
 
   const countPlus = () => {
     if (count > product.stock) return
@@ -71,6 +74,7 @@ const Hero = () => {
       return
     }
     addToCart(product, count)
+
   }
 
   // let AvgRating;
@@ -194,17 +198,20 @@ const Hero = () => {
               </p>
             </div>
             <div className='d-flex justify-content-start'>
+              
+              {!product.is_in_cart && 
               <button
-                class='btn viewBtn'
-                onClick={() => handleAddToCart()}
-                style={{
-                  marginRight: '40px',
-                  marginLeft: '3px',
-                  width: '175px'
-                }}
-              >
-                Add to Cart
-              </button>
+              class='btn viewBtn'
+              onClick={() => handleAddToCart()}
+              style={{
+                marginRight: '40px',
+                marginLeft: '3px',
+                width: '175px'
+              }}
+            >
+              Add to Cart
+            </button>}
+            
               <button class='btn cardBtn' style={{ width: '175px' }}>
                 Buy Now
               </button>

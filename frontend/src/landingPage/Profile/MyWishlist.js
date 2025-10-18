@@ -7,7 +7,7 @@ const MyWishlist = () => {
   const { addToWishlist } = useContext(CartContext)
 
   const fetchData = async () => {
-    const res = await axios.get('http://localhost:4000/wishlists', {
+    const res = await axios.get('http://localhost:4000/wishlist', {
       withCredentials: true
     })
     console.log('fetchData res.data >>', res.data.products)
@@ -41,15 +41,18 @@ const MyWishlist = () => {
     return (
       <li key={item._id}>
         {item.liked && (
-          <div className='d-flex justify-content-between align-items-center'>
+          <div className='d-flex justify-content-between align-items-center flex-fill'>
             <img src={item.images[0]} style={{ width: '100px' }} />
-            <h6>{item.title}</h6>
-            <p>{item.description}</p>
+            <div className='d-flex flex-column justify-content-center align-items-center p-2'>
+              <h6 className='fw-semibold'>{item.title}</h6>
+              <p>{item.description}</p>
+            </div>
             <button
               onClick={() => handleRemoveFromWishlist(item)}
-              className='btn btn-success btn-small'
+              className='btn btn-success btn-sm '
+              style={{borderRadius:"100%"}}
             >
-              Remove
+              x
             </button>
           </div>
         )}
@@ -57,7 +60,12 @@ const MyWishlist = () => {
     )
   })
 
-  return <ul className='ulCard'>{wishlistItems}</ul>
+  return <>
+    <div className='py-5 pe-3 overflow-auto' style={{height:"70vh"}}>
+    <h2 className='fw-semibold mb-4' style={{marginLeft:"313px"}}>My Wishlist</h2>
+    <ul className='wishlistUl '>{wishlistItems}</ul>
+    </div>
+  </>
 }
 
 export default MyWishlist

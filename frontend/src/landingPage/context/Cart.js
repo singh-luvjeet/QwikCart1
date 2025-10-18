@@ -12,11 +12,11 @@ export const CartProvider = ({ children }) => {
 
   const fetchCurrentUser = async () => {
     try {
-      console.log("Fetching current user...")
+      // console.log("Fetching current user...")
       const res = await axios.get('http://localhost:4000/current-user', {
         withCredentials: true
       })
-      console.log("Current user fetched:", res.data)
+      // console.log("Current user fetched:", res.data)
       setCurrentUser(res.data)
     } catch (err) {
       console.error("Error fetching current user:", err)
@@ -34,16 +34,16 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     const fetchCart = async () => {
       if (!currentUser) {
-        console.log("No current user, clearing cart")
+        // console.log("No current user, clearing cart")
         setCartItems([])
         return
       }
       try {
-        console.log(`Fetching cart for user ${currentUser._id}`)
+        // console.log(`Fetching cart for user ${currentUser._id}`)
         const res = await axios.get('http://localhost:4000/cart', {
           withCredentials: true
         })
-        console.log("Cart fetched:", res.data.items)
+        // console.log("Cart fetched:", res.data.items)
         setCartItems(res.data.items || [])
       } catch (err) {
         console.error("Error fetching cart:", err)
@@ -70,7 +70,7 @@ export const CartProvider = ({ children }) => {
       console.log("No user logged in, cannot add to cart")
       return
     } 
-    console.log(`Adding product ${product.id} to wishlist`);
+    // console.log(`Adding product ${product.id} to wishlist`);
     try{
         const res = await axios.post(
         'http://localhost:4000/wishlist/add',
@@ -92,7 +92,7 @@ export const CartProvider = ({ children }) => {
       return
     } 
     try {
-      console.log(`Adding product ${product._id} (qty: ${quantity}) to cart for user ${currentUser._id}`)
+      // console.log(`Adding product ${product._id} (qty: ${quantity}) to cart for user ${currentUser._id}`)
       const res = await axios.post(
         'http://localhost:4000/cart/add',
         { productId: product._id, quantity },

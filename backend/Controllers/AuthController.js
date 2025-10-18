@@ -139,3 +139,16 @@ module.exports.googleAuth = async (req, res) => {
     res.status(400).json({ error: 'Authentication failed' })
   }
 }
+
+
+module.exports.currentUser = (req, res) => {
+  try {
+    // Exclude password from user data
+    const { password, ...userData } = req.user._doc
+
+    res.json(userData)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ message: 'Server error' })
+  }
+}

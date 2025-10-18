@@ -79,21 +79,21 @@ const Card = ({allCards, setAllCards, fetchData, totalPages,handlePageChange,cur
 //   }, [current])
 
 
-  const changeColor = id => {
-    const updatedCard = allCards.map(card =>
-      card.id === id ? { ...card, liked: !card.liked } : card
-    )
-    setAllCards(updatedCard)
-  }
+  // const changeColor = id => {
+  //   const updatedCard = allCards.map(card =>
+  //     card.id === id ? { ...card, liked: !card.liked } : card
+  //   )
+  //   setAllCards(updatedCard)
+  // }
 
-  const handleAddToCart = card => {
-    if (!currentUser) {
-      toast.info('Please login to add items to cart', { position: 'top-right' })
-      navigate('/login')
-      return
-    }
-    addToCart(card, 1)
-  }
+  // const handleAddToCart = card => {
+  //   if (!currentUser) {
+  //     toast.info('Please login to add items to cart', { position: 'top-right' })
+  //     navigate('/login')
+  //     return
+  //   }
+  //   addToCart(card, 1)
+  // }
 
   const handleAddToWishlist = async (card) => {
     console.log("clicked add ", card)
@@ -130,19 +130,19 @@ const Card = ({allCards, setAllCards, fetchData, totalPages,handlePageChange,cur
     // setAllCards(updatedCard)
   }
 
-  const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to delete this product?')) return
-    try {
-      await axios.delete(`http://localhost:4000/cards/${id}/delete`, {
-        withCredentials: true
-      })
-      setAllCards(prev => prev.filter(card => card._id !== id))
-      toast.success('Product deleted successfully', { position: 'top-right' })
-    } catch (err) {
-      console.error(err)
-      toast.error('Failed to delete product', { position: 'top-right' })
-    }
-  }
+  // const handleDelete = async id => {
+  //   if (!window.confirm('Are you sure you want to delete this product?')) return
+  //   try {
+  //     await axios.delete(`http://localhost:4000/cards/${id}/delete`, {
+  //       withCredentials: true
+  //     })
+  //     setAllCards(prev => prev.filter(card => card._id !== id))
+  //     toast.success('Product deleted successfully', { position: 'top-right' })
+  //   } catch (err) {
+  //     console.error(err)
+  //     toast.error('Failed to delete product', { position: 'top-right' })
+  //   }
+  // }
   // console.log("search query>>", searchQuery)
 
 //   const filteredCards = allCards.filter(product =>{
@@ -222,20 +222,22 @@ const Card = ({allCards, setAllCards, fetchData, totalPages,handlePageChange,cur
                 >
                   Edit
                 </button>
-                <button
+                {/* <button
                   className='btn cardBtnDelete mt-2'
                   onClick={() => handleDelete(card._id)}
                 >
                   Delete
-                </button>
+                </button> */}
               </div>
             ) : (
+              <Link to={`/product/${card._id}`}>
               <button
                 className='btn cardBtn mt-2'
-                onClick={() => handleAddToCart(card)}
+                // onClick={() => handleAddToCart(card)}
               >
                 Add to Cart
               </button>
+              </Link>
             )}
           </div>
         </div>
@@ -259,3 +261,5 @@ const Card = ({allCards, setAllCards, fetchData, totalPages,handlePageChange,cur
 }
 
 export default Card;
+
+

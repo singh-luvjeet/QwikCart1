@@ -668,7 +668,12 @@ heroCol1{
 .editImage{
   width: 100px;
   height: 100px;
-  color: black;
-  background-color: black;
+  background-color: white;
   border-radius: 100%;
+}
+
+/* Wishlist profile */
+
+.wishlistUl{
+  list-style-type: none;
 }

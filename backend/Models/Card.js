@@ -38,6 +38,10 @@ const cardSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    addedToCart:{
+        type: Boolean,
+        default: false,
+    },
     images: [   
         {
           type: String,

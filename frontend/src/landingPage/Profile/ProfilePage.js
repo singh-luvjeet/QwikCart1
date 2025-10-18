@@ -1,13 +1,23 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import SideBar from './SideBar'
 import Navbar from '../Navbar'
 import Footer from '../Footer'
 import EditForm from './EditForm'
 import ChangePassword from './ChangePassword'
 import MyWishlist from './MyWishlist'
+import { CartContext } from '../context/Cart'
+import { useNavigate } from 'react-router-dom'
 
 const ProfilePage = () => {
   const [showComponent, setShowComponent] = useState(1)
+  const navigate = useNavigate()
+  const { currentUser, loadingUser } = useContext(CartContext)
+  
+    useEffect(() => {
+      if (!loadingUser && currentUser === null) {
+        navigate('/login')
+      }
+    }, [currentUser, loadingUser, navigate])
 
   const handleClick1 = () => {
     setShowComponent(1)
@@ -32,8 +42,8 @@ const ProfilePage = () => {
               click3={handleClick3}
             />
           </div>
-          <div className='col-1'></div>
-          <div className='col-7'>
+          
+          <div className='col-8'>
             {
                 showComponent===1?<EditForm/>:showComponent===2?<ChangePassword/>:<MyWishlist/> 
             }

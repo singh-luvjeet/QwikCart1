@@ -1,13 +1,20 @@
 import React, { useContext, useState } from 'react'
 import { CartContext } from './context/Cart'
 import { Link, useNavigate } from 'react-router-dom'
+import { useSearch } from './context/SearchContext';
 
-const Navbar = ({handleSearch, searchTerm, setSearchTerm}) => {
+const Navbar = () => {
   const { cartItems, currentUser } = useContext(CartContext)
+  const { searchTerm, setSearchTerm } = useSearch();
   const navigate = useNavigate()
   
+  const handleSearch = e => {
+    e.preventDefault()
+    navigate('/')
+  }
 
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
+  // const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
+  const totalItems = cartItems.length;
 
   const handleCartClick = e => {
     e.preventDefault()
@@ -65,7 +72,7 @@ const Navbar = ({handleSearch, searchTerm, setSearchTerm}) => {
           <div class='collapse navbar-collapse ' id='navbarNavDropdown'>
             <ul class='navbar-nav small ms-5'>
               <li class='nav-item '>
-              <Link class='nav-link' to='/add-product'>
+              <Link class='nav-link' to=''>
                   Add new Product
                 </Link>
               </li>

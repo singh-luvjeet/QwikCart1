@@ -18,7 +18,7 @@ const EditForm = () => {
   }
 
   const fetchUser = async () => {
-    const res = await axios.get(`http://localhost:4000/user-info`, {
+    const res = await axios.get(`http://localhost:4000/user/user-info`, {
       withCredentials: true
     })
     setUserInfo(res.data)
@@ -30,7 +30,7 @@ const EditForm = () => {
 
   const handleClick = async e => {
     let file = e.target.files[0]
-    console.log(file, "aaaaaaaaa")
+    // console.log(file, "aaaaaaaaa")
     if (file) {
       setSelectedFile(file)
     } else {
@@ -78,7 +78,7 @@ const EditForm = () => {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
-        console.log("zzzzzzzzzzz", selectedFile);
+        // console.log("zzzzzzzzzzz", selectedFile);
         const formData = new FormData();
         formData.append('profile_image', selectedFile);
         formData.append('firstName', values.firstName);
@@ -104,19 +104,20 @@ const EditForm = () => {
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
-        <div className='m-5'>
-          <h2 className=''>Edit Your Profile</h2>
+        <div className='m-5 px-5'>
+          <h2 className='text-center fw-semibold'>Edit Your Profile</h2>
 
           <div
             onClick={handleDivClick}
-            className='editImage d-flex justify-content-center align-items-center'
+            className='editImage d-flex justify-content-center align-items-center mx-auto mt-4'
           >
             <img
               style={{
                 maxHeight: '100%',
                 maxWidth: '100%',
                 borderRadius: '100%',
-                objectFit: 'cover'
+                objectFit: 'cover',
+                cursor:"pointer"
               }}
               src={
                 previewUrl
@@ -143,7 +144,7 @@ const EditForm = () => {
             <small className='text-danger'>{formik.errors.image}</small>
           )}
 
-          <div className=''>
+          <div className='mb-3'>
             <label for='firstName' class='form-label'>
               First Name
             </label>
@@ -161,7 +162,7 @@ const EditForm = () => {
               <div className='errorMsg'>{formik.errors.firstName}</div>
             ) : null}
           </div>
-          <div className=''>
+          <div className='mb-3'>
             <label for='lastName' class='form-label'>
               Last Name
             </label>
