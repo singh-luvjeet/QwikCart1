@@ -77,6 +77,36 @@ const AddressListPage = () => {
     }
   }
 
+  const handlePlaceOrder = async () => {
+    if (!selectedAddressId) {
+      toast.error("Please select an address before placing the order");
+      return;
+    }
+  
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/order/add",
+        { addressId: selectedAddressId },
+        { withCredentials: true }
+      );
+  
+      console.log("Order placed:", res.data.order);
+      toast.success("Order placed successfully!");
+      
+      // Show success box
+      setShowSuccessBox(true);
+  
+      // Optional: Clear cart from frontend after order
+      // (Backend already removes selected items)
+      // You can call fetchCart() if it's accessible from context
+  
+    } catch (err) {
+      console.error("Error placing order:", err);
+      toast.error(err.response?.data?.error || "Failed to place order");
+    }
+  };
+  
+
   const handleSelectAddress = addressId => {
     setSelectedAddressId(addressId)
   }
@@ -173,13 +203,7 @@ const AddressListPage = () => {
       >
         <button
           className='btn viewBtn w-25 '
-          onClick={() => {
-            if (!selectedAddressId) {
-              toast.error('Please select an address before placing the order');
-              return; // stop further execution
-            }
-            setShowSuccessBox(true);
-          }}
+          onClick={handlePlaceOrder}
         >
           Buy Now (Cash on Delivery)
         </button>
@@ -200,8 +224,11 @@ const AddressListPage = () => {
             <h4 className='mb-3'>&#127881; Order Placed!</h4>
             <p>Your order has been placed successfully.</p>
             <button
-              className='btn btn-success mt-3'
-              onClick={() => setShowSuccessBox(false)}
+              className='btn btn-success mt-3' 
+              onClick={() => {
+                setShowSuccessBox(false);
+                // navigate("/orders"); // redirect to orders page
+              }}
             >
               OK
             </button>

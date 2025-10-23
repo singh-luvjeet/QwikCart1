@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { CartContext } from '../context/Cart'
 
 const CartTotal = () => {
-  const [allCards, setAllCards] = useState([])
+  const [cart, setCart] = useState([])
   const [selectedItems, setSelectedItems] = useState({})
   const navigate = useNavigate()
   const { currentUser, loadingUser } = useContext(CartContext)
@@ -22,12 +22,14 @@ const CartTotal = () => {
       try {
         const backendURL = 'http://localhost:4000'
         const res = await axios.get(`${backendURL}/cart`, { withCredentials: true })
-        setAllCards(res.data.items)
+        setCart(res.data.items)
+
+        console.log('res.data.items cartTotal', res.data.items)
 
         // Select all items by default
         const initialSelection = {}
         res.data.items.forEach(item => {
-          initialSelection[item._id] = true
+          initialSelection[item.product._id] = true
         })
         //forEach goes through each cart item in the array. For each item: item._id is used as the key in the object. true is set as the value, meaning the item is selected by default.
         setSelectedItems(initialSelection)
@@ -44,16 +46,30 @@ const CartTotal = () => {
     }
   }, [currentUser, loadingUser, navigate])
 
-  // Toggle item selection
-  const handleCheckboxChange = (itemId) => {
-    setSelectedItems(prev => ({
-      ...prev,
-      [itemId]: !prev[itemId]
-    }))
+  
+const handleCheckboxChange = async (productId) => {
+  const newSelected = !selectedItems[productId];
+
+  setSelectedItems(prev => ({
+    ...prev,
+    [productId]: newSelected,
+  }));
+
+  console.log("Toggled:", productId, "New value:", newSelected);
+
+  try {
+    await axios.put("http://localhost:4000/cart/selected", {
+      productId,
+      isSelected: newSelected,
+    }, { withCredentials: true });
+  } catch (err) {
+    console.error("Error updating selected item:", err);
   }
+};
+
 
   // Calculate total of selected items
-  const finalTotal = allCards.reduce(
+  const finalTotal = cart.reduce(
     (sum, item) => sum + (selectedItems[item._id] ? item.product.price * item.quantity : 0),
     0
   )
@@ -73,13 +89,13 @@ const CartTotal = () => {
           </tr>
         </thead>
         <tbody>
-          {allCards.map(item => (
+          {cart.map(item => (
             <tr key={item._id}>
               <td className='text-center'>
                 <input
                   type="checkbox"
-                  checked={selectedItems[item._id] || false}
-                  onChange={() => handleCheckboxChange(item._id)}
+                  checked={selectedItems[item.product._id] || false}
+                  onChange={() => handleCheckboxChange(item.product._id)}
                   style={{ accentColor: 'green', width: '20px', height: '20px' }}
                 />
               </td>
@@ -108,7 +124,7 @@ const CartTotal = () => {
       
       <Link to="/address" className='text-decoration-none'>
         <div className='d-flex justify-content-center mt-5'>
-          <button className='btn viewBtn w-25'>Place Order</button>
+          <button className='btn viewBtn w-25'>Checkout</button>
         </div>
       </Link>
     </div>
