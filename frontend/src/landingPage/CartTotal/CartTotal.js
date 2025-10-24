@@ -24,14 +24,14 @@ const CartTotal = () => {
         const res = await axios.get(`${backendURL}/cart`, { withCredentials: true })
         setCart(res.data.items)
 
-        console.log('res.data.items cartTotal', res.data.items)
+        console.log('res.data.items cartTotal', res.data.isSelected)
 
         // Select all items by default
         const initialSelection = {}
         res.data.items.forEach(item => {
-          initialSelection[item.product._id] = true
+          initialSelection[item.product._id] = item.isSelected
         })
-        //forEach goes through each cart item in the array. For each item: item._id is used as the key in the object. true is set as the value, meaning the item is selected by default.
+        //forEach goes through each cart item in the array. For each item: product._id is used as the key in the object. true is set as the value, meaning the item is selected by default.
         setSelectedItems(initialSelection)
       } catch (err) {
         console.error('Error fetching cart:', err)
@@ -46,7 +46,7 @@ const CartTotal = () => {
     }
   }, [currentUser, loadingUser, navigate])
 
-  
+  console.log('selectedItems', selectedItems)
 const handleCheckboxChange = async (productId) => {
   const newSelected = !selectedItems[productId];
 
@@ -67,10 +67,9 @@ const handleCheckboxChange = async (productId) => {
   }
 };
 
-
-  // Calculate total of selected items
+  // console.log('cart', cart)
   const finalTotal = cart.reduce(
-    (sum, item) => sum + (selectedItems[item._id] ? item.product.price * item.quantity : 0),
+    (sum, item) => sum + (selectedItems[item.product._id] ? item.product.price * item.quantity : 0),
     0
   )
 
@@ -102,12 +101,21 @@ const handleCheckboxChange = async (productId) => {
               <td>{item.product.title}</td>
               <td>
                 <div className='cardStar d-flex justify-content-center align-items-end'>
+                {[1, 2, 3, 4, 5].map(i => (
+                <span
+                  key={i}
+                  className={`fa fa-star ${
+                    item.product.AvgRating >= i ? 'checked' : 'unchecked'
+                  }`}
+                ></span>
+                
+              ))}
+                  {/* <span className='fa fa-star checked'></span>
                   <span className='fa fa-star checked'></span>
                   <span className='fa fa-star checked'></span>
                   <span className='fa fa-star checked'></span>
-                  <span className='fa fa-star checked'></span>
-                  <span className='fa fa-star checked'></span>&nbsp;
-                  <span className='text-muted'>(121)</span>
+                  <span className='fa fa-star checked'></span> */}
+                  &nbsp;<span className='text-muted'>(3)</span>
                 </div>
               </td>
               <td>${item.product.price}</td>

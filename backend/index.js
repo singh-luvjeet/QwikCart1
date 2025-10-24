@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const authRoute = require('./Routes/AuthRoute')
 const addressRoute = require('./Routes/AddressRoute')
 const userRoute = require('./Routes/UserRoute')
+const ordersRoute = require('./Routes/OrdersRoute')
 const wishlistRoute = require('./Routes/wishlistRoute')
 const CardRoute = require("./Routes/CardRoute")
 const CartRoute = require("./Routes/CartRoute")
@@ -48,6 +49,7 @@ app.use('/user', userRoute)
 app.use('/wishlist', wishlistRoute)
 app.use('/cards', CardRoute)
 app.use('/cart', CartRoute)
+app.use('/order', ordersRoute)
 
 
 

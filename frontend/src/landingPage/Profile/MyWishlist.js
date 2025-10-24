@@ -41,19 +41,36 @@ const MyWishlist = () => {
     return (
       <li key={item._id}>
         {item.liked && (
-          <div className='d-flex justify-content-between align-items-center flex-fill'>
-            <img src={item.images[0]} style={{ width: '100px' }} />
-            <div className='d-flex flex-column justify-content-center align-items-center p-2'>
-              <h6 className='fw-semibold'>{item.title}</h6>
-              <p>{item.description}</p>
-            </div>
-            <button
-              onClick={() => handleRemoveFromWishlist(item)}
-              className='btn btn-success btn-sm '
-              style={{borderRadius:"100%"}}
-            >
-              x
-            </button>
+          // <div className='container'>
+          // <div className=' row d-flex justify-content-between align-items-center flex-fill'>
+          //   <div className='col-2'>
+          //   <img src={item.images[0]} style={{ width: '100px' }} />
+          //   </div>
+          //   {/* <div className='d-flex flex-column justify-content-center align-items-center p-2'>
+          //     <h6 className='fw-semibold'>{item.title}</h6>
+          //     <p>{item.description}</p>
+          //   </div> */}
+          //   <div className='col-4'>
+          //   <h6 className='fw-semibold'>{item.title}</h6>
+          //   </div>
+          //   <div className='col-5'>
+          //   <p>{item.description}</p>
+          //   </div>
+          //   <div className='col-1'>
+          //   <button
+          //     onClick={() => handleRemoveFromWishlist(item)}
+          //     className='btn btn-success btn-sm '
+          //     style={{borderRadius:"100%"}}
+          //   >
+          //     <i class="fa fa-trash-o" aria-hidden="true"></i>
+          //   </button>
+          //   </div>
+          // </div>
+          // </div>
+          <div className='my-3'>
+          <div className='wishlistImgDiv'>
+          <img src={item.images[0]} style={{ width: '100px' }} />
+          </div>
           </div>
         )}
       </li>

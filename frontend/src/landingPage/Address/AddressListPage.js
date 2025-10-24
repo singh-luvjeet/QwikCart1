@@ -20,7 +20,7 @@ const AddressListPage = () => {
   //to remember which address the user clicked (selected).
   const [showSuccessBox, setShowSuccessBox] = useState(false)
 
-  const { currentUser, loadingUser } = useContext(CartContext)
+  const { currentUser, loadingUser, fetchCart } = useContext(CartContext)
   const navigate = useNavigate()
 
 
@@ -92,13 +92,8 @@ const AddressListPage = () => {
   
       console.log("Order placed:", res.data.order);
       toast.success("Order placed successfully!");
-      
-      // Show success box
       setShowSuccessBox(true);
-  
-      // Optional: Clear cart from frontend after order
-      // (Backend already removes selected items)
-      // You can call fetchCart() if it's accessible from context
+      fetchCart()
   
     } catch (err) {
       console.error("Error placing order:", err);
@@ -227,7 +222,7 @@ const AddressListPage = () => {
               className='btn btn-success mt-3' 
               onClick={() => {
                 setShowSuccessBox(false);
-                // navigate("/orders"); // redirect to orders page
+                navigate("/orders"); 
               }}
             >
               OK

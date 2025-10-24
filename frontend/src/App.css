@@ -677,3 +677,10 @@ heroCol1{
 .wishlistUl{
   list-style-type: none;
 }
+
+.wishlistImgDiv{
+  height: 100px;
+  width: 100px;
+  background-color: #f6f6f6;
+  border-radius: 20px;
+}

@@ -11,6 +11,7 @@ import EditProductPage from './landingPage/EditProduct/EditProductPage';
 import AddressListPage from './landingPage/Address/AddressListPage';
 import ScrollToTop from './landingPage/ScrollToTop';
 import ProfilePage from './landingPage/Profile/ProfilePage';
+import OrdersPage from './landingPage/Orders/OrdersPage';
 
 
 const App = ()=>{
@@ -27,6 +28,7 @@ const App = ()=>{
       <Route path="/edit-product/:id" element={<EditProductPage/>} />
       <Route path="/address" element={<AddressListPage/>} />
       <Route path="/profile" element={<ProfilePage/>} />
+      <Route path="/orders" element={<OrdersPage/>} />
     </Routes>
   </BrowserRouter>)
 }

@@ -9,6 +9,7 @@ export const CartProvider = ({ children }) => {
   const [wishlistItems, setWishlistItems] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
   const [loadingUser, setLoadingUser] = useState(true)
+  const [itemsChange, setItemsChange] = useState(false);
 
   const fetchCurrentUser = async () => {
     try {
@@ -31,27 +32,33 @@ export const CartProvider = ({ children }) => {
     fetchCurrentUser()
   }, [])
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      if (!currentUser) {
-        // console.log("No current user, clearing cart")
-        setCartItems([])
-        return
-      }
-      try {
-        // console.log(`Fetching cart for user ${currentUser._id}`)
-        const res = await axios.get('http://localhost:4000/cart', {
-          withCredentials: true
-        })
-        // console.log("Cart fetched:", res.data.items)
-        setCartItems(res.data.items || [])
-      } catch (err) {
-        console.error("Error fetching cart:", err)
-        setCartItems([])
-      }
+  const fetchCart = async () => {
+    if (!currentUser) {
+      // console.log("No current user, clearing cart")
+      setCartItems([])
+      return
     }
+    try {
+      // console.log(`Fetching cart for user ${currentUser._id}`)
+      const res = await axios.get('http://localhost:4000/cart', {
+        withCredentials: true
+      })
+      // console.log("Cart fetched:", res.data.items)
+      setCartItems(res.data.items || [])
+      setItemsChange(!itemsChange);
+    } catch (err) {
+      console.error("Error fetching cart:", err)
+      setCartItems([])
+    }
+  }
+
+  useEffect(() => {
+    
     fetchCart()
   }, [currentUser]) 
+
+
+  // console.log('cartItems', cartItems)
 
   const logout = async () => {
     try {
@@ -107,7 +114,7 @@ export const CartProvider = ({ children }) => {
 
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, currentUser, setCurrentUser, logout, loadingUser, wishlistItems, addToWishlist  }}>
+    <CartContext.Provider value={{ cartItems, fetchCart, addToCart, currentUser, setCurrentUser, logout, loadingUser, wishlistItems, addToWishlist  }}>
       {children}
     </CartContext.Provider>
   )

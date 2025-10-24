@@ -13,21 +13,22 @@ const Hero = () => {
   const { addToCart, currentUser } = useContext(CartContext)
   const navigate = useNavigate()
 
+  const fetchProduct = async () => {
+    try {
+      const response = await axios.get(`http://localhost:4000/cards/${id}`, {withCredentials: true});
+      setProduct(response?.data?.card);
+      setLoading(false);
+      // console.log('response?.data?.card?.minimumOrderQuantity', response?.data?.card?.minimumOrderQuantity)
+      setCount(response?.data?.card?.minimumOrderQuantity)
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await axios.get(`http://localhost:4000/cards/${id}`, {withCredentials: true});
-        setProduct(response?.data?.card);
-        setLoading(false);
-        // console.log('response?.data?.card?.minimumOrderQuantity', response?.data?.card?.minimumOrderQuantity)
-        setCount(response?.data?.card?.minimumOrderQuantity)
-      } catch (error) {
-        console.error("Error fetching product:", error);
-        setLoading(false);
-      }
-    };
     fetchProduct();
-  }, [id, product]);
+  }, [id]);
 
   
 
@@ -74,6 +75,7 @@ const Hero = () => {
       return
     }
     addToCart(product, count)
+    fetchProduct()
 
   }
 

@@ -15,7 +15,8 @@ module.exports.cart = async (req, res) => {
         items: cart.items.map(item => ({
           _id: item._id,
           quantity: item.quantity,
-          product: item.productId
+          product: item.productId,
+          isSelected: item.isSelected
         }))
       })
     } catch (err) {
@@ -39,13 +40,13 @@ module.exports.cart = async (req, res) => {
         // console.log("cart2>>", cart);
       } else {
         const existingItem = cart.items.find(
-          item => item.productId.toString() === productId
+          item => item?.productId?.toString() === productId
         )
         // console.log("existingItem>>", existingItem)
         if (existingItem) {
           existingItem.quantity += quantity
         } else {
-          cart.items.push({ productId, quantity })
+          cart?.items?.push({ productId, quantity })
         }
       }
   
@@ -55,3 +56,23 @@ module.exports.cart = async (req, res) => {
       res.status(500).json({ error: error.message })
     }
   }
+
+
+module.exports.updateSelectedItem = async (req, res) => {
+  const userId = req.user._id;
+  const { productId, isSelected } = req.body;
+
+  try {
+    const cart = await Cart.findOne({ userId });
+
+    const item = cart.items.find(item => item.productId.toString() === productId);
+    
+    item.isSelected = isSelected;
+
+    await cart.save();
+    res.status(200).json(cart);
+  
+  } catch (error) {
+      res.status(500).json({ error: error.message })
+    }
+}

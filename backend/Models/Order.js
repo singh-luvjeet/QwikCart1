@@ -1,9 +1,14 @@
 const mongoose = require("mongoose");
 
-const cartSchema = new mongoose.Schema({
+const orderSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
+  },
+  address: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Address",
     required: true,
   },
   items: [
@@ -19,12 +24,8 @@ const cartSchema = new mongoose.Schema({
         min: 1,
         default: 1,
       },
-      isSelected: {
-        type: Boolean,
-        default: true,
-      }
     },
   ],
 }, { timestamps: true });
 
-module.exports = mongoose.model("Cart", cartSchema);
+module.exports = mongoose.model("Order", orderSchema);
