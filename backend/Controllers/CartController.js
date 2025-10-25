@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose")
 const Cart = require("../Models/Cart")
 
 
@@ -76,3 +77,44 @@ module.exports.updateSelectedItem = async (req, res) => {
       res.status(500).json({ error: error.message })
     }
 }
+
+exports.deleteFromCart = async (req, res) => {
+
+  // console.log("inside delete from cart")
+  try {
+    const {id} = req.params;
+    // const {isSelected,type} = req.body;
+    const userId = req.user._id;
+    let cart;
+
+    // console.log('id', id)
+
+    const updatedCart = await Cart.findOneAndUpdate(
+      {userId: userId},
+      { $pull: { items: { productId: id } } }, 
+      { new: true } 
+    );
+
+    // cart = await Cart.findOne({ userId })
+    // if(!cart){
+    //   return res.status(404).json({message:'Cart not Found'});
+
+    // }
+    // if(type==="all") {
+    //   cart.items=[];
+    //   cart.save();
+    //   return res.status(200).json({message:"cart removed successfully"})
+    // }  
+
+
+
+    // console.log('updatedCart', updatedCart)
+    if (!updatedCart) {
+      console.log(`Cart with userId ${userId} not found.`);
+      return res.status(404).json({ message: 'Item not found' });}
+
+    res.json({ message: 'Item deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

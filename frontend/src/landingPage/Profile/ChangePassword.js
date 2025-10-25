@@ -76,8 +76,15 @@ const ChangePassword = () => {
                 },
                 { withCredentials: true }
             );
+
+            if(data.success){
+              toast.success('Password changed successfully!');
+            }else{
+              toast.error('Old Password does not match!');
+            }
             console.log(data);
           } catch (error) {
+            toast.error(error.response?.data?.message || 'Something went wrong');
             console.log(error);
           }
           resetForm();
@@ -183,6 +190,7 @@ const ChangePassword = () => {
     
                </div>
         </form>
+        <ToastContainer />
     </>
     )
 }

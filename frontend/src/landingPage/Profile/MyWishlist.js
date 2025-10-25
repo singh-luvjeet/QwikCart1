@@ -32,7 +32,7 @@ const MyWishlist = () => {
     console.log('removing', item)
 
     const isLiked = item.liked
-    console.log('isLiked from handleRemovetowishlist', isLiked)
+    console.log('isLiked from handleRemoveFromwishlist', isLiked)
     const res = await addToWishlist(item, isLiked)
     fetchData()
   }
@@ -67,9 +67,25 @@ const MyWishlist = () => {
           //   </div>
           // </div>
           // </div>
-          <div className='my-3'>
-          <div className='wishlistImgDiv'>
-          <img src={item.images[0]} style={{ width: '100px' }} />
+
+          <div className='d-flex justify-content-between my-3'>
+            <div className='d-flex justify-content-start'>
+            <div className='wishlistImgDiv'>
+              <img src={item.images[0]} style={{ width: '100px' }} />
+            </div>
+            <div className='ms-4 d-flex flex-column justify-content-center'>
+              <div >{item.title}</div>
+              <p className='text-muted' style={{fontSize:"13px", width:"300px"}}>{item.description}</p>
+            </div>
+            </div>
+            <div className='me-5 d-flex justify-content-center align-items-center'>
+            <button
+              onClick={() => handleRemoveFromWishlist(item)}
+              className='btn btn-success btn-sm'
+              style={{borderRadius:"100%"}}
+            >
+              <i class="fa fa-trash-o" aria-hidden="true"></i>
+            </button>
           </div>
           </div>
         )}

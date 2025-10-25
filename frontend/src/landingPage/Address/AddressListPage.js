@@ -6,6 +6,7 @@ import Footer from '../Footer'
 import { toast, ToastContainer } from 'react-toastify'
 import { CartContext } from '../context/Cart'
 import { useNavigate } from 'react-router-dom'
+import Checkout from './Checkout'
 
 const AddressListPage = () => {
   const [addresses, setAddresses] = useState([])
@@ -112,7 +113,9 @@ const AddressListPage = () => {
       <Navbar />
 
       <div className='container' style={{ marginTop: '70px' }}>
-        <h1 className='fw-semibold mb-4'>Select Address</h1>
+
+        <Checkout/>
+        <h1 className='fw-semibold mb-4 text-center'>Select Address</h1>
         <button
           className='btn viewBtn mb-5'
           onClick={() => {
@@ -167,7 +170,7 @@ const AddressListPage = () => {
                 >
                   Edit
                 </button>
-                <button
+                {!addr.isDefault && <button
                   className='btn btn-sm me-2'
                   style={{
                     color: 'red',
@@ -177,7 +180,7 @@ const AddressListPage = () => {
                   onClick={() => handleDelete(addr._id)}
                 >
                   Delete
-                </button>
+                </button>}
               </div>
             </div>
           ))}
