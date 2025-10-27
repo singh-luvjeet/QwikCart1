@@ -43,9 +43,9 @@ const Orders = () => {
                     </div>
                     <div className='p-3 col-6 d-flex flex-column justify-content-center align-items-center'>
                         <h5 className='fw-semibold text-center'>Address</h5>
-                        <p>{order.address.fullname}, {order.address.phone}</p>
-                        <p>{order.address.street}, {order.address.city}, {order.address.state}</p>
-                        <p>{order.address.postalCode}, {order.address.country}</p>
+                        <p>{order?.address?.fullname}, {order?.address?.phone}</p>
+                        <p>{order?.address?.street}, {order?.address?.city}, {order?.address?.state}</p>
+                        <p>{order?.address?.postalCode}, {order?.address?.country}</p>
                     </div>
                 </div>
             </div>

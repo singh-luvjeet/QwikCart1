@@ -16,6 +16,8 @@ const HomePage = () => {
   // const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedBrand, setSelectedBrand] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
   const navigate = useNavigate()
 
   const handleRatingChange = event => {
@@ -26,7 +28,7 @@ const HomePage = () => {
 
   const fetchData = async (page) => {
     const response = await axios.get(
-      `http://localhost:4000/cards?sort=${priceSort}&keyword=${searchTerm}&rating=${selectedRating}&page=${page}&limit=12`,
+      `http://localhost:4000/cards?sort=${priceSort}&keyword=${searchTerm}&rating=${selectedRating}&page=${page}&limit=12&brand=${selectedBrand}&category=${selectedCategory}`,
       { withCredentials: true }
     )
     setAllCards(response.data.updatedCards)
@@ -34,11 +36,16 @@ const HomePage = () => {
     setCurrentPage(page);
   }
 
+  // console.log('selectedBrand', selectedBrand)
+
   useEffect(() => {
+    // console.log("Filters changed:", { priceSort, searchTerm, selectedRating, selectedBrand, selectedCategory })
     fetchData(1)
-  }, [priceSort,searchTerm, selectedRating])
+  }, [priceSort,searchTerm, selectedRating, selectedBrand, selectedCategory])
 
   const handlePageChange = (page) => fetchData(page);
+
+  console.log('allCards', allCards)
 
   return (
     <>
@@ -53,6 +60,10 @@ const HomePage = () => {
         setPriceSort={setPriceSort}
         selectedRating={selectedRating}
         handleRatingChange={handleRatingChange}
+        selectedBrand={selectedBrand}
+        setSelectedBrand={setSelectedBrand}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
       />
       <Card
         setAllCards={setAllCards}

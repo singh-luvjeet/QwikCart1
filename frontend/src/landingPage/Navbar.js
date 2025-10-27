@@ -72,8 +72,8 @@ const Navbar = () => {
           <div class='collapse navbar-collapse ' id='navbarNavDropdown'>
             <ul class='navbar-nav small ms-5'>
               <li class='nav-item '>
-              <Link class='nav-link' to='/cart-total'>
-                  Your Cart
+              <Link class='nav-link' to='/add-product'>
+                  Add New Product
                 </Link>
               </li>
               <li class='nav-item ms-3'>

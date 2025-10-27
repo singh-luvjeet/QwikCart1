@@ -5,14 +5,15 @@ import { Link } from 'react-router-dom'
 
 const MyWishlist = () => {
   const [wishlist, setWishlist] = useState([])
-  const [count, setCount] = useState(1)
+  const [count, setCount] = useState({})
   const { addToWishlist, fetchCart, addToCart } = useContext(CartContext)
+  console.log("count", count)
 
   const fetchData = async () => {
     const res = await axios.get('http://localhost:4000/wishlist', {
       withCredentials: true
     })
-    // console.log('fetchData res.data >>', res.data.products)
+    console.log('fetchData res.data >>', res.data.products)
     const mappedProduct = await res.data.products.map(product => {
         return {
             id: product.id,
@@ -28,27 +29,41 @@ const MyWishlist = () => {
         }
     })
     setWishlist(mappedProduct);
-    // console.log('mappedProduct', mappedProduct)
+    console.log('mappedProduct', mappedProduct)
   }
   useEffect(() => {
     fetchData()
   }, [])
 
-  const handleAddToCart = (id, item, count) => {
-    addToCart(item, count)
+  const handleAddToCart = (item) => {
+    const quantity = count[item.id] || item.minimumOrderQuantity
+    addToCart(item, quantity)
     fetchCart()
   }
 
-  const countPlus = (id, stock) => {
-    if (count > stock) return
-    setCount(prev => prev + 1)
+  const countPlus = (id, stock, minimumOrderQuantity) => {
+    if (count?.[id] > stock) return
+    // console.log("adding", id)
+    // check if id is present
+
+    setCount((prev)=>{
+      return {
+        ...prev,
+        [id]: prev[id] ? prev[id] + 1 : minimumOrderQuantity
+      }
+    })
   }
 
   const countMinus = (id, minimumOrderQuantity) => {
-    if (count <= minimumOrderQuantity) {
+    if (count?.[id] <= minimumOrderQuantity) {
       return
     }
-    setCount(count - 1)
+    setCount((prev)=>{
+      return {
+        ...prev,
+        [id]: prev[id] ? prev[id] - 1 : minimumOrderQuantity
+      }
+    })
   }
    
   // console.log("wishlist>>", wishlist)
@@ -115,7 +130,10 @@ const MyWishlist = () => {
               <button
                 onClick={()=>countMinus(item.id, item.minimumOrderQuantity)}
                 className='counterButton'
-                disabled={count === item.minimumOrderQuantity}
+                disabled={
+                  (count[item.id] || item.minimumOrderQuantity) ===
+                  item.minimumOrderQuantity
+                }
                 style={{
                   borderBottomLeftRadius: '30px',
                   borderTopLeftRadius: '30px',
@@ -125,12 +143,12 @@ const MyWishlist = () => {
                 -
               </button>
               <div className='counterDiv position-relative'>
-                <p className='counterP'>{count}</p>
+                <p className='counterP'>{count?.[item.id] || item.minimumOrderQuantity}</p>
               </div>
               <button
-                onClick={()=>countPlus(item.id ,item.stock)}
+                onClick={()=>countPlus(item.id ,item.stock, item.minimumOrderQuantity)}
                 className='counterButton'
-                disabled={count === item.stock}
+                disabled={(count[item.id] || item.minimumOrderQuantity) >= item.stock}
                 style={{
                   borderBottomRightRadius: '30px',
                   borderTopRightRadius: '30px',
@@ -143,7 +161,7 @@ const MyWishlist = () => {
    
               <button
               class='btn btn-sm viewBtn'
-              onClick={() => handleAddToCart(item.id, item, count)}
+              onClick={() => handleAddToCart(item, count?.[item.id])}
               style={{
                 marginRight: '40px',
                 marginLeft: '3px',

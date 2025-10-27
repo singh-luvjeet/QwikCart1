@@ -21,14 +21,20 @@ const AddProduct = () => {
 
   const formik = useFormik({
     initialValues: {
-      name: '',
+      title: '',
       description: '',
       price: '',
+      brand: '',
+      category: '',
+      subCategory: ''
     },
     validationSchema: Yup.object({
-      name: Yup.string().required('Name is required'),
+      title: Yup.string().required('Title is required'),
       description: Yup.string().required('Description is required'),
       price: Yup.number().required('Price is required').positive('Price must be positive'),
+      brand: Yup.string().required('Brand is required'),
+      category: Yup.string().required('Category is required'),
+      subCategory: Yup.string().required('Sub Category is required')
     }).required("Required"),
 
     onSubmit: async (values, { resetForm }) => {
@@ -41,9 +47,12 @@ const AddProduct = () => {
 
         //FormData is a built-in browser API for sending form data, especially files.
         const formData = new FormData();
-        formData.append('name', values.name);
+        formData.append('title', values.title);
         formData.append('description', values.description);
         formData.append('price', values.price);
+        formData.append('brand', values.brand);
+        formData.append('category', values.category);
+        formData.append('subCategory', values.subCategory);
 
         selectedFiles.forEach(file => formData.append('images', file));
 
@@ -89,71 +98,119 @@ const AddProduct = () => {
 
 
   return (
-    <div className="container" style={{marginTop:"80px"}}>
+    <div className="container" style={{ marginTop: "80px" }}>
       <h2 className="text-center mb-4">Add New Product</h2>
-      <form onSubmit={formik.handleSubmit} className="w-50 mx-auto">
-        <div className="mb-3 form-floating">
-          <input
-            type="text"
-            name="name"
-            className="form-control"
-            placeholder="Product Name"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur} // marks field as touched. If there’s a validation error, it can show it.
-            value={formik.values.name}
-          />
-          <label htmlFor="name" className=''>
-            Product Name
-          </label>
-          {formik.touched.name && formik.errors.name && (
-            <small className="text-danger">{formik.errors.name}</small>
-          )}
+  
+      <form onSubmit={formik.handleSubmit} className="w-75 mx-auto">
+
+        <div className="row">
+          <div className="col-md-6 mb-3 form-floating">
+            <input
+              type="text"
+              name="title"
+              className="form-control"
+              placeholder="Product Title"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.title}
+            />
+            <label className='ms-2' htmlFor="title">Product Title</label>
+            {formik.touched.title && formik.errors.title && (
+              <small className="text-danger">{formik.errors.title}</small>
+            )}
+          </div>
+
+          <div className="col-md-6 mb-3 form-floating">
+            <input
+              type="text"
+              name="description"
+              className="form-control"
+              placeholder="Product Description"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.description}
+            />
+            <label className='ms-2' htmlFor="description">Product Description</label>
+            {formik.touched.description && formik.errors.description && (
+              <small className="text-danger">{formik.errors.description}</small>
+            )}
+          </div>
         </div>
 
-        {/* Description */}
-        <div className="mb-3 form-floating">
-          <textarea
-            name="description"
-            className="form-control"
-            placeholder="Product Description"
-            rows="3"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.description}
-          />
-          <label htmlFor="description" className=''>
-            Product Description
-          </label>
-          {formik.touched.description && formik.errors.description && (
-            <small className="text-danger">{formik.errors.description}</small>
-          )}
+        <div className="row">
+          <div className="col-md-6 mb-3 form-floating">
+            <input
+              type="number"
+              name="price"
+              className="form-control"
+              placeholder="Price"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.price}
+            />
+            <label className='ms-2' htmlFor="price">Price ($)</label>
+            {formik.touched.price && formik.errors.price && (
+              <small className="text-danger">{formik.errors.price}</small>
+            )}
+          </div>
+
+          <div className="col-md-6 mb-3 form-floating">
+            <input
+              type="text"
+              name="brand"
+              className="form-control"
+              placeholder="Brand"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.brand}
+            />
+            <label className='ms-2' htmlFor="brand">Brand</label>
+            {formik.touched.brand && formik.errors.brand && (
+              <small className="text-danger">{formik.errors.brand}</small>
+            )}
+          </div>
         </div>
 
-        {/* Price */}
-        <div className="mb-3 form-floating">
-          <input
-            type="number"
-            name="price"
-            className="form-control"
-            placeholder="$ Price"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.price}
-          />
-          <label htmlFor="price" className=''>
-            $ Price
-          </label>
-          {formik.touched.price && formik.errors.price && (
-            <small className="text-danger">{formik.errors.price}</small>
-          )}
+        <div className="row">
+          <div className="col-md-6 mb-3 form-floating">
+            <input
+              type="text"
+              name="category"
+              className="form-control"
+              placeholder="Category"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.category}
+            />
+            <label className='ms-2' htmlFor="category">Category</label>
+            {formik.touched.category && formik.errors.category && (
+              <small className="text-danger">{formik.errors.category}</small>
+            )}
+          </div>
+  
+          <div className="col-md-6 mb-3 form-floating">
+            <input
+              type="text"
+              name="subCategory"
+              className="form-control"
+              placeholder="Subcategory"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.subCategory}
+            />
+            <label className='ms-2' htmlFor="subCategory">Subcategory</label>
+            {formik.touched.subCategory && formik.errors.subCategory && (
+              <small className="text-danger">{formik.errors.subCategory}</small>
+            )}
+          </div>
         </div>
-
  
         <div className="mb-3">
+          <label className="form-label">Product Images</label>
           <input
             type="file"
             name="images"
-            accept="image/*" //Restricts the file picker to images only.
+            accept="image/*"
             multiple
             className="form-control"
             onChange={handleImageChange}
@@ -162,29 +219,31 @@ const AddProduct = () => {
           {formik.touched.images && formik.errors.images && (
             <small className="text-danger">{formik.errors.images}</small>
           )}
+  
           <div className="d-flex flex-wrap mt-3">
             {imagePreviews.map((preview, index) => (
               <div key={index} className="position-relative me-2 mb-2">
                 <img
                   src={preview}
                   alt={`Preview ${index + 1}`}
-                  style={{ width: '100px', height: '100px', borderRadius: '8px'}}
+                  style={{ width: "100px", height: "100px", borderRadius: "8px" }}
                 />
                 <button
                   type="button"
                   onClick={() => handleRemoveImage(index)}
                   style={{
-                    display:"flex", alignItems:"center",
-                    position: 'absolute',
-                    top: '-5px',
-                    right: '-5px',
-                    background: '#255F38',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: '20px',
-                    height: '20px',
-                    cursor: 'pointer',
+                    display: "flex",
+                    alignItems: "center",
+                    position: "absolute",
+                    top: "-5px",
+                    right: "-5px",
+                    background: "#255F38",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "50%",
+                    width: "20px",
+                    height: "20px",
+                    cursor: "pointer",
                   }}
                 >
                   ×
@@ -198,9 +257,9 @@ const AddProduct = () => {
           Add Product
         </button>
       </form>
-      <ToastContainer />
     </div>
   );
+  
 };
 
 export default AddProduct;

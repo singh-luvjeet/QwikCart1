@@ -26,6 +26,8 @@ const Hero = () => {
     }
   };
 
+  // console.log('product', product)
+
   useEffect(() => {
     fetchProduct();
   }, [id]);
@@ -220,7 +222,7 @@ const Hero = () => {
             </div>
 
             <table
-              className='mt-3 mt-5 mb-5'
+              className='mt-3 mt-5 mb-3'
               style={{ borderCollapse: 'collapse', width: '100%' }}
             >
               <tr className='lh-1'>
@@ -258,6 +260,9 @@ const Hero = () => {
                 </td>
               </tr>
             </table>
+
+            <h6 className='fw-semibold'>Seller Info</h6>
+            <p className='text-muted mb-5' style={{fontSize:"13px"}}>{product.owner.firstName} {product.owner.lastName}, {product.owner.email}</p>
           </div>
         </div>
       </div>

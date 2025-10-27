@@ -10,10 +10,12 @@ const CardRoute = require("./Routes/CardRoute")
 const CartRoute = require("./Routes/CartRoute")
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-const multer = require('multer')
-const { storage } = require('./cloudConfig')
-const upload = multer({ storage })
 const path = require('path')
+const Card = require('./Models/Card')
+const importRoute = require('./Routes/ImportRoute')
+const filterRoute = require('./Routes/Filters')
+
+
 app.use(express.static(path.join(__dirname, 'public')))
 
 const PORT = 4000
@@ -50,7 +52,8 @@ app.use('/wishlist', wishlistRoute)
 app.use('/cards', CardRoute)
 app.use('/cart', CartRoute)
 app.use('/order', ordersRoute)
-
+app.use('/import', importRoute)
+app.use('/', filterRoute);
 
 
 // app.post("/import", async (req,res) => {
@@ -63,114 +66,6 @@ app.use('/order', ordersRoute)
 //     console.error('Error importing products:', error);
 //     res.status(500).json({ message: 'Failed to import products.' });
 // }
-// })
-
-
-
-
-// app.post(
-//   '/cards/add-card',
-//   authMiddleware,
-//   upload.array('images', 4),
-//   async (req, res) => {
-//     try {
-//       const { name, description, price } = req.body
-
-//       if (!name || !description || !price || !req.files?.length) {
-//         return res.status(400).json({ message: 'All fields are required' })
-//       }
-
-//       const imagePaths = req.files.map(file => file.path)
-
-//       const newCard = new Card({
-//         name,
-//         description,
-//         price,
-//         images: imagePaths,
-//         owner: req.user._id
-//       })
-//       await newCard.save()
-
-//       res
-//         .status(201)
-//         .json({ message: 'Product added successfully', product: newCard })
-//     } catch (err) {
-//       console.error(err)
-//       res.status(500).json({ message: 'Server error' })
-//     }
-//   }
-// )
-
-
-// app.patch(
-//   '/cards/:id/edit',
-//   authMiddleware,
-//   upload.array('images', 4),
-//   async (req, res) => {
-//     try {
-//       const { id } = req.params
-//       const { name, description, price } = req.body
-
-//       const card = await Card.findById(id)
-//       if (!card) return res.status(404).json({ message: 'Card not found' })
-
-//       if (card.owner.toString() !== req.user._id.toString()) {
-//         return res
-//           .status(403)
-//           .json({ message: 'Forbidden: You are not the owner' })
-//       }
-
-//       if (name) card.name = name
-//       if (description) card.description = description
-//       if (price) card.price = price
-
-//       // Parse the list of images to keep
-//       const imagesToKeep = req.body.existingImages
-//         ? JSON.parse(req.body.existingImages)
-//         : []
-
-//       // Remove deleted images from card.images
-//       const removedImages = card.images.filter(
-//         img => !imagesToKeep.includes(img)
-//       )
-//       // Optionally: delete removedImages from cloud storage here
-
-//       card.images = [...imagesToKeep]
-
-//       // Add newly uploaded images
-//       if (req.files?.length) {
-//         const newImagePaths = req.files.map(file => file.path)
-//         card.images.push(...newImagePaths)
-//       }
-//       await card.save()
-//       res.json({ message: 'Card updated successfully', card })
-//     } catch (err) {
-//       console.error(err)
-//       res.status(500).json({ message: 'Server error' })
-//     }
-//   }
-// )
-
-// app.delete('/cards/:id/delete', authMiddleware, async (req, res) => {
-//   try {
-//     const { id } = req.params
-
-//     const card = await Card.findById(id)
-//     if (!card) return res.status(404).json({ message: 'Card not found' })
-
-//     if (card.owner.toString() !== req.user._id.toString()) {
-//       return res
-//         .status(403)
-//         .json({ message: 'Forbidden: You are not the owner' })
-//     }
-
-//     await Card.findByIdAndDelete(id)
-
-//     res.json({ message: 'Card deleted successfully' })
-//   } catch (err) {
-//     console.error(err)
-//     res.status(500).json({ message: 'Server error' })
-//   }
 // })
 
 app.listen(PORT, () => {

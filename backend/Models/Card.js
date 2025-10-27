@@ -3,11 +3,10 @@ const mongoose = require("mongoose");
 const cardSchema = new mongoose.Schema({
     AvgRating:{
         type: Number,
-        required: true,
+        default: 4,
     },
     id:{
         type: Number,
-        required: true,
     },
     title:{
         type: String,
@@ -23,17 +22,24 @@ const cardSchema = new mongoose.Schema({
     },
     minimumOrderQuantity:{
         type: Number,
-        required: true,
+        default:1,
     },
     stock:{
         type: Number,
-        required: true,
+        default: 25,
     },
     brand: {
-        type: String,
-        // required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Brand"
     },
-
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category"
+    },
+    subCategory: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "subCategory"
+    },
     liked:{
         type: Boolean,
         default: false,
@@ -51,7 +57,7 @@ const cardSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        // required: true
+        required: true
     },
     
 },{timestamps: true})

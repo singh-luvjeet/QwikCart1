@@ -4,17 +4,33 @@ import img9 from '../../assets/favorite.png'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { CartContext } from '../context/Cart'
-import { toast } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import Pagination from './pagination'
 
-const Card = ({allCards, setAllCards, fetchData, totalPages,handlePageChange,currentPage}) => {
+const Card = ({
+  allCards,
+  setAllCards,
+  fetchData,
+  totalPages,
+  handlePageChange,
+  currentPage
+}) => {
   // const [allCards, setAllCards] = useState([]);
   // const [current, setCurrent] = useState(1);
   // const [isLiked, setIsLiked] = useState(false);
   const { addToCart, currentUser, addToWishlist } = useContext(CartContext)
-  
 
   const navigate = useNavigate()
+
+  // const handleImportProducts = async () => {
+  //   try {
+  //     await axios.post('http://localhost:4000/import', {}, { withCredentials: true });
+  //     alert('Products successfully imported to MongoDB!');
+  //   } catch (error) {
+  //     console.error('Error importing products:', error);
+  //     alert('Failed to import products.');
+  //   }
+  // };
 
   // const fetchData = async() =>{
 
@@ -32,52 +48,54 @@ const Card = ({allCards, setAllCards, fetchData, totalPages,handlePageChange,cur
   //   setCurrent(current);
   // }
 
-//   let skip = (current - 1)*12;
-//   // ?limit=12&skip=${skip}
-//   const fetchData = async () => {
-//   const res = await axios.get(`https://dummyjson.com/products?limit=30&skip=30`);
-//   console.log("full data>>",res.data.products)
-//   const mappedProduct = await res.data.products.map(product => {
+  //   let skip = (current - 1)*12;
+  //   // ?limit=12&skip=${skip}
+  //   const fetchData = async () => {
+  //   const res = await axios.get(`https://dummyjson.com/products?limit=60&skip=0`);
+  //   console.log("full data>>",res.data.products)
+  //   const mappedProduct = await res.data.products.map(product => {
 
-//       let AvgRating;
-//       let sum = 0;
-//       for(let i=0; i<product.reviews.length; i++){
-//         sum += product.reviews[i].rating;
-//       }
-//       AvgRating = Math.floor(sum/product.reviews.length);
-//       return {
-//         id: product.id,
-//         title: product.title,
-//         description: product.description,
-//         price: product.price,
-//         stock: product.stock,
-//         brand: product.brand,
-//         images: product.images,
-//         AvgRating: AvgRating,
-//         ratingLength: product.reviews.length,
-//         // reviews: product.reviews,
-//         minimumOrderQuantity: product.minimumOrderQuantity
-//       }
-//     })
-//     setAllCards(mappedProduct);
-//   }
+  //       let AvgRating;
+  //       let sum = 0;
+  //       for(let i=0; i<product.reviews.length; i++){
+  //         sum += product.reviews[i].rating;
+  //       }
+  //       AvgRating = Math.floor(sum/product.reviews.length);
+  //       return {
+  //         id: product.id,
+  //         title: product.title,
+  //         description: product.description,
+  //         price: product.price,
+  //         stock: product.stock,
+  //         brand: product.brand,
+  //         images: product.images,
+  //         AvgRating: AvgRating,
+  //         ratingLength: product.reviews.length,
+  //         // reviews: product.reviews,
+  //         minimumOrderQuantity: product.minimumOrderQuantity,
+  //         category: product.category,
+  //         availabilityStatus: product.availabilityStatus,
+  //         owner: currentUser?._id
+  //       }
+  //     })
+  //     setAllCards(mappedProduct);
+  //     console.log('mappedProduct', mappedProduct)
+  //   }
 
-//   const handleImportProducts = async () => {
-//     try {
-//       console.log("pushing cards", allCards)
-//         await axios.post('http://localhost:4000/import', {allCards});
-//         alert('Products successfully pushed to MongoDB!');
-//     } catch (error) {
-//         console.error('Error pushing products to MongoDB:', error);
-//         alert('Failed to push products to MongoDB.');
-//     }
-// };
+  //   const handleImportProducts = async () => {
+  //     try {
+  //       console.log("pushing cards", allCards)
+  //         await axios.post('http://localhost:4000/import', {allCards});
+  //         alert('Products successfully pushed to MongoDB!');
+  //     } catch (error) {
+  //         console.error('Error pushing products to MongoDB:', error);
+  //         alert('Failed to push products to MongoDB.');
+  //     }
+  // };
 
-
-//   useEffect(() => {
-//     fetchData();
-//   }, [current])
-
+  //   useEffect(() => {
+  //     fetchData();
+  //   }, [current, currentUser])
 
   // const changeColor = id => {
   //   const updatedCard = allCards.map(card =>
@@ -95,34 +113,35 @@ const Card = ({allCards, setAllCards, fetchData, totalPages,handlePageChange,cur
   //   addToCart(card, 1)
   // }
 
-  const handleAddToWishlist = async (card) => {
-    console.log("clicked add ", card)
+  const handleAddToWishlist = async card => {
+    console.log('clicked add ', card)
     if (!currentUser) {
-      toast.info('Please login to add items to Wishlist', { position: 'top-right' })
+      toast.info('Please login to add items to Wishlist', {
+        position: 'top-right'
+      })
       navigate('/login')
       return
     }
     const isLiked = card.liked
     // setIsLiked(!isLiked);
-    console.log("isLiked from handleaddtowishlist", isLiked)
+    console.log('isLiked from handleaddtowishlist', isLiked)
     const res = await addToWishlist(card, isLiked)
     fetchData()
-
   }
-    const handleRemoveFromWishlist = async (card) => {
-      console.log("removing", card)
-      if (!currentUser) {
-        toast.info('Please login to add items to Wishlist', { position: 'top-right' })
-        navigate('/login')
-        return
-      }
-      // setIsLiked(!isLiked);
-      const isLiked = card.liked
-      console.log("isLiked from handleRemovetowishlist", isLiked)
-      const res = await addToWishlist(card, isLiked)
-      fetchData()
-
-    
+  const handleRemoveFromWishlist = async card => {
+    console.log('removing', card)
+    if (!currentUser) {
+      toast.info('Please login to add items to Wishlist', {
+        position: 'top-right'
+      })
+      navigate('/login')
+      return
+    }
+    // setIsLiked(!isLiked);
+    const isLiked = card.liked
+    console.log('isLiked from handleRemovetowishlist', isLiked)
+    const res = await addToWishlist(card, isLiked)
+    fetchData()
 
     // const updatedCard = allCards.map(card =>
     //   card.id === id ? { ...card, liked: !card.liked } : card
@@ -130,34 +149,34 @@ const Card = ({allCards, setAllCards, fetchData, totalPages,handlePageChange,cur
     // setAllCards(updatedCard)
   }
 
-  // const handleDelete = async id => {
-  //   if (!window.confirm('Are you sure you want to delete this product?')) return
-  //   try {
-  //     await axios.delete(`http://localhost:4000/cards/${id}/delete`, {
-  //       withCredentials: true
-  //     })
-  //     setAllCards(prev => prev.filter(card => card._id !== id))
-  //     toast.success('Product deleted successfully', { position: 'top-right' })
-  //   } catch (err) {
-  //     console.error(err)
-  //     toast.error('Failed to delete product', { position: 'top-right' })
-  //   }
-  // }
+  const handleDelete = async id => {
+    if (!window.confirm('Are you sure you want to delete this product?')) return
+    try {
+      await axios.delete(`http://localhost:4000/cards/${id}/delete`, {
+        withCredentials: true
+      })
+      setAllCards(prev => prev.filter(card => card._id !== id))
+      toast.success('Product deleted successfully', { position: 'top-right' })
+    } catch (err) {
+      console.error(err)
+      toast.error('Failed to delete product', { position: 'top-right' })
+    }
+  }
   // console.log("search query>>", searchQuery)
 
-//   const filteredCards = allCards.filter(product =>{
-//     product.title.toLowerCase().includes(searchQuery.toLowerCase())
-// })
+  //   const filteredCards = allCards.filter(product =>{
+  //     product.title.toLowerCase().includes(searchQuery.toLowerCase())
+  // })
 
-// const filteredCards = allCards.filter((product) => {
-//   if (selectedRating === 'all') {
-//     return true; // Show all products
-//   }
-//   return product.AvgRating >= selectedRating;
-// });
+  // const filteredCards = allCards.filter((product) => {
+  //   if (selectedRating === 'all') {
+  //     return true; // Show all products
+  //   }
+  //   return product.AvgRating >= selectedRating;
+  // });
 
   // const cardItems = filteredCards.map(card => {
-    const cardItems = allCards.map(card => {
+  const cardItems = allCards.map(card => {
     const isOwner = currentUser && currentUser._id === card.owner // check ownership
     return (
       <li key={card.id}>
@@ -182,7 +201,6 @@ const Card = ({allCards, setAllCards, fetchData, totalPages,handlePageChange,cur
             ) : (
               <i
                 className='fa fa-heart-o cardHeart '
-                
                 onClick={() => handleAddToWishlist(card)}
                 aria-hidden='true'
               ></i>
@@ -198,13 +216,22 @@ const Card = ({allCards, setAllCards, fetchData, totalPages,handlePageChange,cur
               </p>
             </div>
 
-            <p className='card-text text-muted cardP'>{`${card.description.slice(0,65)+"..."}`}</p>
+            <p className='card-text text-muted cardP'>
+              {card.description.length > 65
+                ? `${card.description.slice(0, 65)}...`
+                : card.description}
+            </p>
 
             <div className='cardStar'>
-               
-                {[1,2,3,4,5].map((i)=>(<span key={i} className={`fa fa-star ${card.AvgRating>=i?"checked":"unchecked"}`}></span>))}
-            
-              
+              {[1, 2, 3, 4, 5].map(i => (
+                <span
+                  key={i}
+                  className={`fa fa-star ${
+                    card.AvgRating >= i ? 'checked' : 'unchecked'
+                  }`}
+                ></span>
+              ))}
+
               {/* <span className={`fa fa-star checked`}></span>
               <span className={`fa fa-star checked`}></span>
               <span className={`fa fa-star checked`}></span>
@@ -218,25 +245,28 @@ const Card = ({allCards, setAllCards, fetchData, totalPages,handlePageChange,cur
               <div className='d-flex justify-content-between'>
                 <button
                   className='btn cardBtnEdit  mt-2'
-                  onClick={() => navigate(`/edit-product/${card._id}`)}
+                  
+                  onClick={() => {
+                    console.log("Navigating to edit:", card._id);
+                    navigate(`/edit-product/${card._id}`)}}
                 >
                   Edit
                 </button>
-                {/* <button
+                <button
                   className='btn cardBtnDelete mt-2'
                   onClick={() => handleDelete(card._id)}
                 >
                   Delete
-                </button> */}
+                </button>
               </div>
             ) : (
               <Link to={`/product/${card._id}`}>
-              <button
-                className='btn cardBtn mt-2'
-                // onClick={() => handleAddToCart(card)}
-              >
-                Add to Cart
-              </button>
+                <button
+                  className='btn cardBtn mt-2'
+                  // onClick={() => handleAddToCart(card)}
+                >
+                  Add to Cart
+                </button>
               </Link>
             )}
           </div>
@@ -247,19 +277,19 @@ const Card = ({allCards, setAllCards, fetchData, totalPages,handlePageChange,cur
 
   return (
     <>
-    <div className='cardsContainer'>
-      <h3 className='h3Card fw-semibold'>Products For You!</h3>
-      {/* <button onClick={handleImportProducts}>button</button> */}
-      <ul className='ulCard d-flex flex-wrap mb-5'>{cardItems}</ul>
-    </div>
-    <Pagination
+      <div className='cardsContainer'>
+        <h3 className='h3Card fw-semibold'>Products For You!</h3>
+        {/* <button onClick={handleImportProducts}>button</button> */}
+        <ul className='ulCard d-flex flex-wrap mb-5'>{cardItems}</ul>
+      </div>
+      <Pagination
         totalPages={totalPages}
         handlePageChange={handlePageChange}
-        currentPage={currentPage}/>
+        currentPage={currentPage}
+      />
+      <ToastContainer/>
     </>
   )
 }
 
-export default Card;
-
-
+export default Card
