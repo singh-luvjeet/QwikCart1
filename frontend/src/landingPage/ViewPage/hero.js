@@ -205,7 +205,7 @@ const Hero = () => {
               <button
               class='btn viewBtn'
               onClick={() => handleAddToCart()}
-              style={{
+              style={{ 
                 marginRight: '40px',
                 marginLeft: '3px',
                 width: '175px'

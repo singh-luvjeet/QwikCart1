@@ -46,6 +46,8 @@ const AddressListPage = () => {
       }
     }
   }
+
+  console.log('addresses', addresses)
   
 
   useEffect(() => {
@@ -68,7 +70,10 @@ const AddressListPage = () => {
     if (!window.confirm('Are you sure you want to delete this address?')) return
     try {
       await axios.delete(`http://localhost:4000/address/${addressId}`, {
-        withCredentials: true
+        withCredentials: true,
+        // data: {
+        //   addresses: addresses
+        // },
       })
       toast.success('Address deleted successfully!')
       fetchAddresses() // refresh list after deletion
@@ -145,7 +150,7 @@ const AddressListPage = () => {
               }}
               onClick={() => handleSelectAddress(addr._id)} // 👈 click to select
             >
-              {addr.isDefault && (
+              {(addr.isDefault) && (
                 <span className='badge bg-success w-25 mb-3'>Default</span>
               )}
               <p>
@@ -188,6 +193,7 @@ const AddressListPage = () => {
 
         {showModal && (
           <AddressForm
+            addresses={addresses}
             editAddress={editingAddress}
             onClose={() => setShowModal(false)}
             onSuccess={fetchAddresses}

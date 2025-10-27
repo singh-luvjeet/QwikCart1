@@ -82,37 +82,70 @@ exports.deleteFromCart = async (req, res) => {
 
   // console.log("inside delete from cart")
   try {
-    const {id} = req.params;
-    // const {isSelected,type} = req.body;
+    const {selectedItems:selectedItems,  type:type} = req.body;
+    console.log('req.body', req.body)
     const userId = req.user._id;
-    let cart;
+    
+
+    // console.log('userId', userId)
 
     // console.log('id', id)
 
-    const updatedCart = await Cart.findOneAndUpdate(
-      {userId: userId},
-      { $pull: { items: { productId: id } } }, 
-      { new: true } 
-    );
+    // if(type === "only one"){
+    //   const updatedCart = await Cart.findOneAndUpdate(
+    //     {userId: userId},
+    //     { $pull: { items: { productId: selectedItems } } }, 
+    //     { new: true } 
+    //   );
 
-    // cart = await Cart.findOne({ userId })
-    // if(!cart){
-    //   return res.status(404).json({message:'Cart not Found'});
-
+    //   // console.log('updatedCart', updatedCart)
+    //   if (!updatedCart) {
+    //     console.log(`Cart with userId ${userId} not found.`);
+    //     return res.status(404).json({ message: 'Item not found' });}
     // }
-    // if(type==="all") {
-    //   cart.items=[];
-    //   cart.save();
-    //   return res.status(200).json({message:"cart removed successfully"})
-    // }  
 
+    let cart;
 
+    cart = await Cart.findOne({ userId })
+    if(!cart){
+      return res.status(404).json({message:'Cart not Found'});
 
-    // console.log('updatedCart', updatedCart)
-    if (!updatedCart) {
-      console.log(`Cart with userId ${userId} not found.`);
-      return res.status(404).json({ message: 'Item not found' });}
+    }
+    if(type==="all") {
+      cart.items=[];
+      cart.save();
+      return res.status(200).json({message:"Items removed successfully"})
+    }  
 
+    // if (type === "selected"){
+    //   let isValid = true
+    //   let arr = []
+    //   cart.items = cart.items.filter(item => {
+    //     for(let i=0; i<selectedItems.length; i++){
+    //       if(selectedItems[i] === item.productId.toString()){
+    //         isValid = false
+    //       }
+    //       if (isValid === true){
+    //         arr.push(item.productId)
+    //       }
+    //     }
+    //     return arr
+        
+    //   })
+    //   cart.save()
+    //   return res.status(200).json({message:"Items removed successfully"})
+    // }
+
+    // const objectId = new mongoose.Types.ObjectId(stringId);
+    // const arr = selectedItems.map(id => new mongoose.Types.ObjectId(id));
+    //   console.log('arr', arr)
+
+    if (type === "selected" || type==="only one"){  
+      cart.items = cart.items.filter(item => !selectedItems.includes(item.productId.toString()))
+      cart.save()
+      return res.status(200).json({message:"Items removed successfully"})
+    }
+    
     res.json({ message: 'Item deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });

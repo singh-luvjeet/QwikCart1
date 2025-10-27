@@ -214,8 +214,8 @@
 //         </div>
 //       </Link>
 
-//       {/* <button className='btn viewBtn me-5'>Delete Selected Items</button>
-//       <button onClick={handleDeleteAll} className='btn viewBtn'>Delete All</button> */}
+      // {/* <button className='btn viewBtn me-5'>Delete Selected Items</button>
+      // <button onClick={handleDeleteAll} className='btn viewBtn'>Delete All</button> */}
 //     </div>
 //   )
 // }
@@ -233,7 +233,7 @@ const CartTotal = () => {
   const [cart, setCart] = useState([])
   const [selectedItems, setSelectedItems] = useState([])
   const navigate = useNavigate()
-  const { currentUser, loadingUser } = useContext(CartContext)
+  const { currentUser, loadingUser, fetchCart } = useContext(CartContext)
 
 
   useEffect(() => {
@@ -242,7 +242,7 @@ const CartTotal = () => {
     }
   }, [currentUser, loadingUser, navigate])
 
-  const fetchCart = async () => {
+  const fetchCartItems = async () => {
     try {
       const backendURL = 'http://localhost:4000'
       const res = await axios.get(`${backendURL}/cart`, {
@@ -266,11 +266,11 @@ const CartTotal = () => {
     }
   }
 
-  console.log('selectedItems', selectedItems)
+  // console.log('selectedItems', selectedItems)
 
   useEffect(() => {
     if (!loadingUser && currentUser) {
-      fetchCart()
+      fetchCartItems()
     }
   }, [currentUser, loadingUser, navigate])
 
@@ -300,18 +300,50 @@ const CartTotal = () => {
   }
 
 
-  const handleDelete = async productId => {
+  const handleDelete = async (productId ,type) => {
     console.log('inside cart delete')
     if (!window.confirm('Are you sure you want to delete this Item?')) return
     try {
-      await axios.delete(`http://localhost:4000/cart/${productId}`, {isSelected: selectedItems},
-        {withCredentials: true})
+      if(type === "selected"){
+        console.log('selectedItems', selectedItems)
+        await axios.delete(`http://localhost:4000/cart/delete`,
+          {
+            withCredentials: true,
+            data: {
+              selectedItems: selectedItems,
+              type: type,
+            },
+          });
+      }else if(type === "only one"){
+        await axios.delete(`http://localhost:4000/cart/delete`,
+          {
+            withCredentials: true,
+            data: {
+              selectedItems: [productId],
+              type: type,
+            },
+          });
+      }else{
+        await axios.delete(`http://localhost:4000/cart/delete`,
+          {
+            withCredentials: true,
+            data: {
+              type: type,
+            },
+          });
+      }
+      
+        
       toast.success('Item deleted successfully!')
       fetchCart()
+      fetchCartItems()
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to delete item')
+      console.log('err', err)
+      toast.error('Failed to delete item')
     }
   }
+
+  console.log('cart', cart)
 
 
   const finalTotal = cart.reduce((sum, item) => {
@@ -320,7 +352,7 @@ const CartTotal = () => {
       : sum
   }, 0)
 
-  return (
+  return ( 
     <div style={{ margin: '80px 40px 80px 40px' }}>
       <h1 className='fw-semibold text-center mb-4'>Your Cart</h1>
       <table className='table table-bordered table-striped'>
@@ -368,7 +400,7 @@ const CartTotal = () => {
               <td>{item.quantity}</td>
               <td>${item.product.price * item.quantity}</td>
               <td>
-                <div onClick={() => handleDelete(item.product._id)}>
+                <div onClick={() => handleDelete(item.product._id, "only one")}>
                   <i
                     style={{ color: 'green', cursor: 'pointer' }}
                     className='fa fa-trash-o'
@@ -390,6 +422,13 @@ const CartTotal = () => {
           <button className='btn viewBtn w-25'>Checkout</button>
         </div>
       </Link>
+
+       {(cart && cart.length!==0) && 
+       <>
+       <button onClick={() => handleDelete("" ,"selected")} className='btn viewBtn me-5'>Delete Selected Items</button>
+      <button onClick={() => handleDelete("", "all")} className='btn viewBtn'>Delete All</button>
+      </>
+      }
     </div>
   )
 }

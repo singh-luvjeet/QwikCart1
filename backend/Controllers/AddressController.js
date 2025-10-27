@@ -5,12 +5,22 @@ exports.addAddress = async (req, res) => {
     const userId = req.user._id;
     const { isDefault } = req.body;
 
-    // If user sets this as default, unset others
+    let address 
+    
+    const AllAddress = await Address.find({user: userId})
+    console.log('AllAddress', AllAddress)
+    if(AllAddress.length===0){
+      address = await Address.create({ ...req.body, isDefault: true, user: userId });
+    }else{
+      address = await Address.create({ ...req.body, user: userId });
+    }
+
     if (isDefault) {
       await Address.updateMany({ user: userId }, { isDefault: false });
     }
 
-    const address = await Address.create({ ...req.body, user: userId });
+    
+
     res.status(201).json(address);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -59,6 +69,8 @@ exports.deleteAddress = async (req, res) => {
 
     const deleted = await Address.findOneAndDelete({ _id: id, user: userId });
     if (!deleted) return res.status(404).json({ message: 'Address not found' });
+
+    
 
     res.json({ message: 'Address deleted successfully' });
   } catch (err) {

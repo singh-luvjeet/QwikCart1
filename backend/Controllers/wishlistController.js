@@ -14,8 +14,10 @@ module.exports.wishlists = async (req, res) => {
     const productIds = wishlist.items.map(item => item.productId)
     // console.log(productIds);
     const products = await Card.find({ id: { $in: productIds } }).select(
-      'id title description images liked'
+      'id title description images liked _id minimumOrderQuantity stock'
     )
+
+    console.log('products', products)
 
     res.json({ products })
   } catch (err) {

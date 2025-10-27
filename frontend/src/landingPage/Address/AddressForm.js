@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import { toast, ToastContainer } from 'react-toastify'
 import axios from 'axios'
 
-const AddressForm = ({ onClose, onSuccess, editAddress }) => {
+const AddressForm = ({ onClose, onSuccess, editAddress, addresses }) => {
   //destructuring props
 
   const formik = useFormik({
@@ -39,13 +39,15 @@ const AddressForm = ({ onClose, onSuccess, editAddress }) => {
           )
           toast.success('Address updated successfully!')
         } else {
-          await axios.post('http://localhost:4000/address', values, {
+          const res = await axios.post('http://localhost:4000/address', values, {
             withCredentials: true
           })
+          console.log('res', res)
+
           toast.success('Address added successfully!')
         }
         resetForm()
-        onSuccess() // callback to refresh address list
+        onSuccess() 
         onClose() // close modal
       } catch (err) {
         toast.error(err.response?.data?.message || 'Something went wrong')
@@ -88,7 +90,7 @@ const AddressForm = ({ onClose, onSuccess, editAddress }) => {
                 )}
               </div>
             ))}
-            <div className='mb-3 form-check'>
+            {(editAddress?.isDefault === false) && <div className='mb-3 form-check'>
               <input
                 type='checkbox'
                 name='isDefault'
@@ -98,7 +100,7 @@ const AddressForm = ({ onClose, onSuccess, editAddress }) => {
                 style={{ boxShadow: 'none' }}
               />
               <label className='form-check-label'>Set as Default</label>
-            </div>
+            </div>}
             <div className='d-flex justify-content-start'>
               <button
                 type='button'
